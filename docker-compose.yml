@@ -1,0 +1,43 @@
+version: "3"
+services:
+  server-db:
+    #image: mysql:8.0
+    build:
+      context: ./
+      dockerfile: mysql_dockerfile
+    networks: 
+      - tunaweza
+    environment:
+      - MYSQL_ROOT_PASSWORD=xxxxxx89
+    volumes:
+      - ./db/:/home    
+    #working_dir: /home
+    #entrypoint: mysql create-user.sql 
+      #- MYSQL_DATABASE=law
+      #- MYSQL_USER=azaria
+      #- MYSQL_PASSWORD=@xxxxxx89
+    #command: [bash,-c,mysql -uroot -D mysql -pxxxxxx89, create user "azaria"@"%" identified by "@xxxxxx89";, grant all on *.* to "azaria"@"%";]
+  
+  server-web:
+    #image: php:8.3.12
+    image: php:8.2-cli
+    ports:
+      - 8000:8000
+    networks:
+      - tunaweza
+    volumes:
+      - .:/home/monitoring
+    #working_dir: /home/law
+    #entrypoint: bash apt-install.sh
+    stdin_open: true  
+    
+    #build:
+    #  context: ./
+    #  dockerfile: php_dockerfile
+    #depends_on:
+    #  - mysql-server
+    #command: [bash, -c, apt update]
+    #command: [ bash, -c, apt install -y default-jre default-jdk maven net-tools iputils-ping]
+ 
+networks:
+  tunaweza:

@@ -5,6 +5,7 @@
 
 package com.tunaweza.monitoring.controllers;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,9 +20,10 @@ import lombok.Data;
 @Data
 @RequestMapping("/monitoring")
 public class MonitorController {
-
+    @Value("${owner.name}")
+    private String owner;
     @GetMapping("/homepage")
     public String index(){
-        return "Je suis la page index";
+        return "Je suis la page homepage:"+this.owner;
     }
 }

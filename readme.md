@@ -23,4 +23,6 @@ Checking
 
 6. ``` docker exec -ti monitoring_server-web_1 bash /home/monitoring/apt-install.sh ```
 
-7. Go to your host browser and type: http://localhost:8000/, it should display: "Je suis la page Acceuil" 
+7. Go to your host browser and type: http://localhost:8000/monitoring/homepage, it should display: "Je suis la page homepage" 
+
+<img src="uml-class.jpg" alt="uml class" title="class schema" width="700"/>

@@ -5,25 +5,55 @@
 
 package com.tunaweza.monitoring.controllers;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.Data;
+import com.tunaweza.monitoring.contract.QrCodeInterface;
+
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
  * @author azaria
  */
 @RestController
-@Data
+@AllArgsConstructor
+@Getter
+@Setter
 @RequestMapping("/monitoring")
 public class MonitorController {
-    @Value("${owner.name}")
-    private String owner;
+    
+    private QrCodeInterface qrCodeService;
+    //@Value("${owner.name}")
+    //private final String owner;
+    @Autowired
+    private ServletContext server;
+    
     @GetMapping("/homepage")
-    public String index(){
-        return "Je suis la page homepage:"+this.owner;
+    public String index(HttpServletRequest request){
+       
+            //new URL(request.getRequestURL().toString());
+            String filename="qr-code"+System.currentTimeMillis()+".png";
+            String pathFileName="./src/main/resources/static/qr-code/"+filename;
+            qrCodeService.initializeValue("Dieu est bon", 400);
+            qrCodeService.writeImage(pathFileName, "png");
+            //String urlPathFile=url.getProtocol()+"://"+url.getHost()+":"+url.getPort();
+            String img="<img src='"+getServerHost(request)+"/qr-code/"+filename+"' title='qrcode' alt='qrcode-image'/>";
+            return img;
+        
+    }
+    public String getServerHost(HttpServletRequest request){
+        return request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort();
     }
 }

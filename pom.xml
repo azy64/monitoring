@@ -74,7 +74,20 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+		<!--zxing-->
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>3.5.3</version>
+		</dependency>
+
+	
+   <dependency>
+     <groupId>com.kuisama.zxing</groupId>
+     <artifactId>zxing-spring-boot-starter</artifactId>
+     <version>1.0.0.RELEASE</version>
+   </dependency>
+ </dependencies>
 
 	<build>
 		<plugins>

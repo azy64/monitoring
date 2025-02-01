@@ -81,12 +81,11 @@
 			<version>3.5.3</version>
 		</dependency>
 
-	
-   <dependency>
-     <groupId>com.kuisama.zxing</groupId>
-     <artifactId>zxing-spring-boot-starter</artifactId>
-     <version>1.0.0.RELEASE</version>
-   </dependency>
+		<dependency>
+			<groupId>com.kuisama.zxing</groupId>
+			<artifactId>zxing-spring-boot-starter</artifactId>
+			<version>1.0.0.RELEASE</version>
+		</dependency>
  </dependencies>
 
 	<build>

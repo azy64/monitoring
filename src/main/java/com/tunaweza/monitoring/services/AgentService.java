@@ -47,7 +47,7 @@ public class AgentService implements  AgentServiceInterface{
 
     @Override
     public Agent findAgent(Long id) {
-        return agentRepository.findById(id).get();
+        return agentRepository.findById(id).orElse(null);
     }
 
     @Override

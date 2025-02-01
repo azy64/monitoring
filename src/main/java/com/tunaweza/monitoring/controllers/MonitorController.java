@@ -44,13 +44,14 @@ public class MonitorController {
     public String index(HttpServletRequest request){
        
             //new URL(request.getRequestURL().toString());
-            String filename="qr-code"+System.currentTimeMillis()+".png";
-            String pathFileName="./src/main/resources/static/qr-code/"+filename;
-            qrCodeService.initializeValue("Dieu est bon", 400);
-            qrCodeService.writeImage(pathFileName, "png");
+            //String filename="qr-code"+System.currentTimeMillis()+".png";
+            ///String pathFileName="./src/main/resources/static/qr-code/"+filename;
+            //qrCodeService.initializeValue("Dieu est bon", 400);
+            //qrCodeService.writeImage(pathFileName, "png");
             //String urlPathFile=url.getProtocol()+"://"+url.getHost()+":"+url.getPort();
-            String img="<img src='"+getServerHost(request)+"/qr-code/"+filename+"' title='qrcode' alt='qrcode-image'/>";
-            return img;
+            //String img="<img src='"+getServerHost(request)+"/qr-code/"+filename+"' title='qrcode' alt='qrcode-image'/>";
+            //return img;
+        return "";
         
     }
     public String getServerHost(HttpServletRequest request){

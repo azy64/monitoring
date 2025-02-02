@@ -6,9 +6,12 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.tunaweza.monitoring.contract.CheckPointServiceInterface;
+import com.tunaweza.monitoring.model.Agent;
 import com.tunaweza.monitoring.model.CheckPoint;
+import com.tunaweza.monitoring.model.ControlPoint;
 import com.tunaweza.monitoring.repository.CheckPointRepository;
 
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -52,6 +55,21 @@ public class CheckPointService implements  CheckPointServiceInterface{
     @Override
     public List<CheckPoint> findAll() {
         return checkPointRepository.findAll();
+    }
+
+    @Override
+    public List<CheckPoint> findCheckPointByAgentAndControlPoint(Agent agent, ControlPoint controlPoint){
+        return checkPointRepository.findCheckPointByAgentAndControlPoint(agent, controlPoint);
+    }
+
+    @Override
+    public List<CheckPoint> findCheckPointByAgent(Agent agent){
+        return checkPointRepository.findCheckPointByAgent(agent);
+    }
+    
+    @Override
+    public List<CheckPoint> findCheckPointByControlPoint(ControlPoint controlPoint){
+        return checkPointRepository.findCheckPointByControlPoint(controlPoint);
     }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tunaweza.monitoring.contract.ControlPointServiceInterface;
 import com.tunaweza.monitoring.exception.ResourceAlreadyExistException;
+import com.tunaweza.monitoring.model.Around;
 import com.tunaweza.monitoring.model.ControlPoint;
 import com.tunaweza.monitoring.repository.ControlPointRepository;
 
@@ -54,4 +55,9 @@ public class ControlPointService implements ControlPointServiceInterface {
         return controlPointRepository.findAll();
     }
 
+    @Override
+    public List<ControlPoint> findControlPointByAround(Around around){
+        return controlPointRepository.findControlPointByAround(around);
+    }
 }
+

@@ -17,7 +17,7 @@ import java.util.UUID;
 @Transactional
 public class CustomerService implements CustomerServiceInterface {
 
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
 
     @Override

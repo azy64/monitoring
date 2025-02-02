@@ -3,7 +3,6 @@ package com.tunaweza.monitoring.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -11,7 +10,7 @@ import java.util.UUID;
 @Data
 public class Customer {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.UUID)
     private UUID id;
     private String name;
 

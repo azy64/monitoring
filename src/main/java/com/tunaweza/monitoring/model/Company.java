@@ -1,11 +1,9 @@
 package com.tunaweza.monitoring.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,7 +11,7 @@ import java.util.UUID;
 @Data
 public class Company {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy= GenerationType.UUID)
     private UUID id;
 
     private String name;
@@ -23,6 +21,7 @@ public class Company {
 
     private Boolean activated;
 
+    @Column(unique = true)
     private String referenceNumber;
 
     @Column(unique = true)
@@ -32,5 +31,16 @@ public class Company {
 
     private String address;
 
+    private Date createAt;
 
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Customer> customers;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Agent> agents;
+
+    @OneToOne(orphanRemoval = true)
+    @JoinColumn(name = "subscription_id")
+    private Subscription subscription;
 }

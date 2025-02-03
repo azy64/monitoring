@@ -19,6 +19,7 @@ public class Customer {
     private String phone;
     private String address;
 
+    @Column(unique = true)
     private String referenceNumber;
 
     private String siret;

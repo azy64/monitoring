@@ -4,8 +4,8 @@ import com.tunaweza.monitoring.contract.CustomerServiceInterface;
 import com.tunaweza.monitoring.exception.ResourceAlreadyExistException;
 import com.tunaweza.monitoring.model.Customer;
 import com.tunaweza.monitoring.repository.CustomerRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tunaweza.monitoring.utils.ReferenceNumberGeneratorInterface;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,19 +13,27 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Transactional
 public class CustomerService implements CustomerServiceInterface {
 
     private final CustomerRepository customerRepository;
+    private final ReferenceNumberGeneratorInterface referenceNumberGenerator;
 
 
     @Override
     public Customer save(Customer customer) throws ResourceAlreadyExistException {
 
         Customer customerExisted = customerRepository.findByEmail(customer.getEmail());
-                if(customerExisted!=null) throw new ResourceAlreadyExistException("Customer existe dejà");
-                return customerRepository.save(customer);
+        if (customerExisted != null) {
+            throw new ResourceAlreadyExistException("Customer existe déjà");
+        }
+
+        if (customer.getReferenceNumber() == null || customer.getReferenceNumber().isEmpty()) {
+            customer.setReferenceNumber(referenceNumberGenerator.generateReferenceNumber(customer.getName()));
+        }
+
+        return customerRepository.save(customer);
     }
 
     @Override

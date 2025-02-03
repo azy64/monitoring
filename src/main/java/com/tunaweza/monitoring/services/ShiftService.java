@@ -11,10 +11,12 @@ import com.tunaweza.monitoring.model.Around;
 import com.tunaweza.monitoring.model.Shift;
 import com.tunaweza.monitoring.repository.ShiftRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class ShiftService  implements  ShiftServiceInterface{
 
     private final ShiftRepository shiftRepository;

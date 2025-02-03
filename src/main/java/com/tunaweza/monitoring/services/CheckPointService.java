@@ -11,11 +11,12 @@ import com.tunaweza.monitoring.model.CheckPoint;
 import com.tunaweza.monitoring.model.ControlPoint;
 import com.tunaweza.monitoring.repository.CheckPointRepository;
 
-import jakarta.persistence.Version;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class CheckPointService implements  CheckPointServiceInterface{
 
     private final CheckPointRepository checkPointRepository;

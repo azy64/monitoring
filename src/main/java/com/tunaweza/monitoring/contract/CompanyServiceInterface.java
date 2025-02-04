@@ -11,6 +11,7 @@ public interface CompanyServiceInterface {
     public void delete(UUID id);
     public Company update(Company company, UUID id);
     public Company findCompanyById(UUID id);
+    public List<Company> findAllByUserId(UUID userId);
     public List<Company> findAll();
 
 }

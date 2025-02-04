@@ -43,4 +43,8 @@ public class Company {
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "subscription_id")
     private Subscription subscription;
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User owner;
 }

@@ -4,12 +4,18 @@ import com.tunaweza.monitoring.contract.CompanyServiceInterface;
 import com.tunaweza.monitoring.model.Company;
 import com.tunaweza.monitoring.repository.CompanyRepository;
 import com.tunaweza.monitoring.utils.ReferenceNumberGeneratorInterface;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.security.core.Authentication;
+
+import com.tunaweza.monitoring.model.User;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +24,7 @@ public class CompanyService implements CompanyServiceInterface {
 
     private final CompanyRepository companyRepository;
     private final ReferenceNumberGeneratorInterface referenceNumberGenerator;
+    private final Authentication authentication;
 
 
     @Override
@@ -56,8 +63,17 @@ public class CompanyService implements CompanyServiceInterface {
     }
 
     @Override
-    public Company findCompanyById(UUID id) {return companyRepository.findById(id).orElse(null);}
+    public Company findCompanyById(UUID id) {
+        return companyRepository.findById(id).orElse(null);
+    }
 
     @Override
-    public List<Company> findAll() {return companyRepository.findAll();}
+    public List<Company> findAll() {
+        return companyRepository.findAll();
+    }
+
+    @Override
+    public List<Company> findAllByUserId(UUID userId){
+        return companyRepository.findAllByUserId(userId);
+    }
 }

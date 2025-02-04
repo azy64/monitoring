@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface AroundRepository extends JpaRepository<Around, UUID> {
-    public List<Around> findAroundByShift(Shift shift);
+    //public List<Around> findAroundByShift(Shift shift);
 
     public List<Around> findAroundByCustomer(Customer customer);
 }

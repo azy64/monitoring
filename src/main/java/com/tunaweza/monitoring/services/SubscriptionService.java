@@ -52,17 +52,18 @@ public class SubscriptionService implements SubscriptionServiceInterface {
         return subscriptionRepository.findAll();
     }
 
-    @Override
+   /* @Override
     public List<Subscription> findActiveSubscriptions() {
         return subscriptionRepository.findActiveSubscriptions();
     }
-
+    
     @Override
     public boolean isSubscriptionValid(UUID id) {
-       /* return subscriptionRepository.findById(id)
+       return subscriptionRepository.findById(id)
                 .map(subscription -> subscription.getSubscribeEndDate().isAfter(subscription.getSubscribeDate()))
-                .orElse(false);*/
+                .orElse(false);
 
         return true;
     }
+ */
 }

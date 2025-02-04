@@ -56,13 +56,12 @@ public class AroundService implements AroundServiceInterface {
         return aroundRepository.findAll();
     }
 
-    @Override
+   /* @Override
     public List<Around> findAroundByShift(Shift shift) {
         return aroundRepository.findAroundByShift(shift);
 
     }
-
-
+    */
 
     @Override
     public List<Around> findAroundByCustomer(Customer customer) {

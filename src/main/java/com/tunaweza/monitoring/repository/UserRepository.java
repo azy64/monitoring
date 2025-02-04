@@ -8,5 +8,5 @@ import com.tunaweza.monitoring.model.User;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
 
-    public User findByUserName(String username);
+    public User findByUsername(String username);
 }

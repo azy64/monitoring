@@ -13,10 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.security.core.Authentication;
-
-import com.tunaweza.monitoring.model.User;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -24,7 +20,6 @@ public class CompanyService implements CompanyServiceInterface {
 
     private final CompanyRepository companyRepository;
     private final ReferenceNumberGeneratorInterface referenceNumberGenerator;
-    private final Authentication authentication;
 
 
     @Override

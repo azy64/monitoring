@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+import com.tunaweza.monitoring.model.User;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -68,7 +70,7 @@ public class CompanyService implements CompanyServiceInterface {
     }
 
     @Override
-    public List<Company> findAllByUserId(UUID userId){
-        return companyRepository.findAllByUserId(userId);
+    public List<Company> findAllByUser(User user){
+        return companyRepository.findAllByOwner(user);
     }
 }

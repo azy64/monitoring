@@ -27,7 +27,7 @@ public class ConnectionController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user){
-        if(userRepository.findByUserName(user.getUsername())!=null)
+        if(userRepository.findByUsername(user.getUsername())!=null)
             return ResponseEntity.badRequest().body("user name already exist");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return ResponseEntity.ok(userRepository.save(user));

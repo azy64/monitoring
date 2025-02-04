@@ -11,6 +11,6 @@ public interface SubscriptionServiceInterface {
     public void delete(UUID id);
     public Subscription update(Subscription subscription, UUID id);
     public List<Subscription> findAll();
-    List<Subscription> findActiveSubscriptions();
-    boolean isSubscriptionValid(UUID id);
+    //List<Subscription> findActiveSubscriptions();
+    //boolean isSubscriptionValid(UUID id);
 }

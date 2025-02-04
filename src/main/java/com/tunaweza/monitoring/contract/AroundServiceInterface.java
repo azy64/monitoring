@@ -13,7 +13,7 @@ public interface AroundServiceInterface {
     Around findAroundById(UUID id);
 
     public List<Around> findAll();
-    public List<Around> findAroundByShift(Shift shift);
+    //public List<Around> findAroundByShift(Shift shift);
     public List<Around> findAroundByCustomer(Customer customer);
 
 

@@ -26,4 +26,7 @@ public class Around {
     @OneToMany(mappedBy = "around", orphanRemoval = true)
     private List<ControlPoint> controlPoints;
 
+    @OneToMany(mappedBy = "around",orphanRemoval=true)
+    private List<Shift>shifts;
+
 }

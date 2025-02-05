@@ -1,6 +1,7 @@
 package com.tunaweza.monitoring.services;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +54,10 @@ public class AgentService implements  AgentServiceInterface{
     @Override
     public List<Agent> findAll() {
         return agentRepository.findAll();
+    }
+
+    public List<Agent> getAgentsByCompany(UUID companyId) {
+        return agentRepository.findByCompanyId(companyId);
     }
 
 }

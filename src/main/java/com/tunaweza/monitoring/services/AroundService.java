@@ -68,4 +68,8 @@ public class AroundService implements AroundServiceInterface {
         return aroundRepository.findAroundByCustomer(customer);
     }
 
+    public List<Around>getAroundsByCompany(UUID companyId) {
+        return aroundRepository.findByCustomer_Company_Id(companyId);
+    }
+
 }

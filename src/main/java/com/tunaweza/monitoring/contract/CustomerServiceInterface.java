@@ -9,9 +9,11 @@ import java.util.UUID;
 
 public interface CustomerServiceInterface {
 
-    public Customer save(Customer customer) throws ResourceAlreadyExistException;
-    public void delete(UUID id);
-    public Customer update(Customer customer, UUID id) throws ResourceAlreadyExistException;
-    public Customer findCustomer(UUID id);
-    public List<Customer> findAll();
+     Customer save(Customer customer) throws ResourceAlreadyExistException;
+     void delete(UUID id);
+     Customer update(Customer customer, UUID id) throws ResourceAlreadyExistException;
+     Customer findCustomer(UUID id);
+     List<Customer> findAll();
+
+     List<Customer> getCustomersByCompany(UUID companyId);
 }

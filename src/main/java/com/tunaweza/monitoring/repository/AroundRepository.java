@@ -10,4 +10,6 @@ public interface AroundRepository extends JpaRepository<Around, UUID> {
     //public List<Around> findAroundByShift(Shift shift);
 
     public List<Around> findAroundByCustomer(Customer customer);
+
+    List<Around> findByCustomer_Company_Id(UUID companyId);
 }

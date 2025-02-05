@@ -64,4 +64,8 @@ public class CustomerService implements CustomerServiceInterface {
     public List<Customer> findAll() {
         return customerRepository.findAll();
     }
+
+    public List<Customer>getCustomersByCompany(UUID companyId) {
+        return customerRepository.findByCompanyId(companyId);
+    }
 }

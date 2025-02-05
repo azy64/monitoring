@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tunaweza.monitoring.contract.CompanyServiceInterface;
 import com.tunaweza.monitoring.model.Company;
-import com.tunaweza.monitoring.model.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,9 +21,9 @@ public class CompanyController {
     private final CompanyServiceInterface companyService;
     @PostMapping("/company")
     public ResponseEntity<?> createCompany(
-        @RequestBody Company company,@RequestBody User user
+        @RequestBody Company company
     ){
-        System.out.println("user:"+user.getUsername()+" company:"+company.getOwner().getId());
+        System.out.println(" company:"+company.getOwner().getId());
         return ResponseEntity.ok(companyService.save(company));
     }
 

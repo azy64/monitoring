@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tunaweza.monitoring.model.User;
 import com.tunaweza.monitoring.repository.UserRepository;
+import com.tunaweza.monitoring.services.JWTService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +26,7 @@ public class ConnectionController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final JWTService jwtService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user){
@@ -36,9 +39,9 @@ public class ConnectionController {
     @PostMapping("/login")
     public ResponseEntity<?>loginUser(@RequestBody User user){
         try {
-            authenticationManager
+            Authentication authentication = authenticationManager
             .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-            return ResponseEntity.ok("login successful");
+            return ResponseEntity.ok(jwtService.generateToken(authentication));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("invalid username and password");
         }

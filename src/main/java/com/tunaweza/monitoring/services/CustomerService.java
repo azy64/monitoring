@@ -65,6 +65,7 @@ public class CustomerService implements CustomerServiceInterface {
         return customerRepository.findAll();
     }
 
+    @Override
     public List<Customer>getCustomersByCompany(UUID companyId) {
         return customerRepository.findByCompanyId(companyId);
     }

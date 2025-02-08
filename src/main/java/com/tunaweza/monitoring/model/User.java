@@ -3,6 +3,8 @@ package com.tunaweza.monitoring.model;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -24,6 +26,7 @@ public class User {
     private String pictureUser;
     private String role;
     @OneToMany(orphanRemoval=true, mappedBy="owner")
+    @JsonIgnore
     private List<Company> Company;
     private Boolean activated;
     private Boolean isUsingMfa;

@@ -1,22 +1,24 @@
 package com.tunaweza.monitoring.contract;
 
+import com.tunaweza.monitoring.dto.AroundInputDTO;
+import com.tunaweza.monitoring.dto.AroundOutputDTO;
 import com.tunaweza.monitoring.model.*;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface AroundServiceInterface {
-     Around save(Around around);
+    AroundOutputDTO save(AroundInputDTO aroundDTO);
      void delete(UUID id);
-     Around update(Around around, UUID id);
+    AroundOutputDTO update(UUID id, AroundInputDTO aroundDTO);
 
-    Around findAroundById(UUID id);
+    AroundOutputDTO findAroundById(UUID id);
 
-     List<Around> findAll();
+     List<AroundOutputDTO> findAll();
     //public List<Around> findAroundByShift(Shift shift);
-     List<Around> findAroundByCustomer(Customer customer);
+     List<AroundOutputDTO> findAroundByCustomer(UUID customerId);
 
-     List<Around> getAroundsByCompany(UUID companyId);
+     List<AroundOutputDTO> getAroundsByCompany(UUID companyId);
 
 
 

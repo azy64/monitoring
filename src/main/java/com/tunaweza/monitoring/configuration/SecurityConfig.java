@@ -22,8 +22,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
+import com.tunaweza.monitoring.constants.JwtConstant;
 import com.tunaweza.monitoring.filter.CustomJwtFilter;
 import com.tunaweza.monitoring.services.CustomUserDetails;
+import com.tunaweza.monitoring.services.JwtServiceDecoder;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,26 +34,26 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final CustomUserDetails userDetails;
-    private final String jwtKey ="FxgP5G12tlyUwcZW/Xafb1BX9isM8Lw1eKxeSv3vtngnxqsOWl6saGW+1aO40Fpq";
-    //@Value("${issue-uri}")
-    //private final String issuerUri;
+    //private final String jwtKey ="FxgP5G12tlyUwcZW/Xafb1BX9isM8Lw1eKxeSv3vtngnxqsOWl6saGW+1aO40Fpq";
+    private final JwtServiceDecoder jwtServiceDecoder;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
         .httpBasic(Customizer.withDefaults())
+        .addFilterBefore(new CustomJwtFilter(userDetails,jwtServiceDecoder), UsernamePasswordAuthenticationFilter.class)
         .csrf(csrf-> csrf.disable())
         .authorizeHttpRequests(auth->{
             auth.requestMatchers("/admins/**").authenticated()
-            .requestMatchers("/users/**").authenticated()
-            //.//hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
+            .requestMatchers("/users/**")//.authenticated()
+            .hasAnyAuthority("SCOPE_USER","ADMIN")
             //.hasRole("ADMIN")
-            //.hasAnyRole("ADMIN","USER")
+            //.hasAnyRole("USER")
             .requestMatchers("/agents/**").authenticated()
             //.hasRole("AGENT")
             .anyRequest().permitAll();
         })
-        .addFilterBefore(new CustomJwtFilter(userDetails), UsernamePasswordAuthenticationFilter.class)
+        
         .oauth2ResourceServer(oauth2 -> oauth2
         .jwt(Customizer.withDefaults())
         )
@@ -74,12 +76,12 @@ public class SecurityConfig {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        SecretKeySpec secretKey = new SecretKeySpec(this.jwtKey.getBytes(), 0, this.jwtKey.getBytes().length,"RSA");
+        SecretKeySpec secretKey = new SecretKeySpec(JwtConstant.SECRET_JWT_KEY.getBytes(), 0, JwtConstant.SECRET_JWT_KEY.getBytes().length,"RSA");
         return NimbusJwtDecoder.withSecretKey(secretKey).macAlgorithm(MacAlgorithm.HS256).build();
     }
 
     @Bean
     public JwtEncoder jwtEncoder() {
-        return new NimbusJwtEncoder(new ImmutableSecret<>(this.jwtKey.getBytes()));
+        return new NimbusJwtEncoder(new ImmutableSecret<>(JwtConstant.SECRET_JWT_KEY.getBytes()));
     }
 }

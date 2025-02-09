@@ -1,16 +1,16 @@
 package com.tunaweza.monitoring.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Data
+@Builder
 public class Company {
     @Id
     @GeneratedValue(strategy= GenerationType.UUID)

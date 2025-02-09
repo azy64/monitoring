@@ -1,68 +1,58 @@
 package com.tunaweza.monitoring.filter;
 
 import java.io.IOException;
-import java.time.Instant;
+import java.util.Date;
 
+import org.apache.catalina.filters.RequestFilter;
+import org.apache.juli.logging.Log;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.tunaweza.monitoring.constants.JwtConstant;
 import com.tunaweza.monitoring.services.CustomUserDetails;
+import com.tunaweza.monitoring.services.JwtServiceDecoder;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class CustomJwtFilter extends OncePerRequestFilter {
+public class CustomJwtFilter extends RequestFilter {
 
     private final CustomUserDetails customUserDetails;
+    private final JwtServiceDecoder jwtserviceDecoder;
     @Override
-    protected void doFilterInternal(
-        @SuppressWarnings("null") HttpServletRequest request, 
-        @SuppressWarnings("null") HttpServletResponse response, 
-        @SuppressWarnings("null") FilterChain filterChain
-        ) throws ServletException, IOException {
-        final String authHeader =request.getHeader("Authorisation");
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        final String authHeader = httpRequest.getHeader("Authorization");
         String username=null;
-        //String jwt=null;
+        Date expiredDate=null;
         if(authHeader!=null && authHeader.startsWith("Bearer ")){
-            //jwt= authHeader.substring(7);
-            username= extractUsername(SecurityContextHolder.getContext().getAuthentication());
+            String jwt= authHeader.substring(7);
+            Claims claims= jwtserviceDecoder.extractAllClaims(jwt,JwtConstant.SECRET_JWT_KEY);
+            username= claims.get("username", String.class);
+            expiredDate = claims.getExpiration();
         }
-        if(username!=null){
+        if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null){
+            
             UserDetails userDetails = customUserDetails.loadUserByUsername(username);
-            if(isTokenExpired(SecurityContextHolder.getContext().getAuthentication())==false){
-                UsernamePasswordAuthenticationToken authenticationToken= new UsernamePasswordAuthenticationToken(userDetails, userDetails.getAuthorities());
+            
+            if(jwtserviceDecoder.isTokenNotExpired(expiredDate)){
+                UsernamePasswordAuthenticationToken authenticationToken= new UsernamePasswordAuthenticationToken(userDetails, null,userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         }
-        filterChain.doFilter(request, response);
+        chain.doFilter(request, response);
     }
 
-     public String extractUsername(Authentication authentication){
-        if(authentication instanceof JwtAuthenticationToken jwtToken){
-            Jwt jwt = jwtToken.getToken();
-
-            return jwt.getSubject();
-        }
-        throw new UnsupportedOperationException("not found");
-    }
-
-    public boolean isTokenExpired(Authentication authentication){
-        Instant now = Instant.now();
-        if(authentication instanceof JwtAuthenticationToken jwtToken){
-            Jwt jwt = jwtToken.getToken();
-            Instant old=jwt.getExpiresAt();
-            return now.isAfter(old);
-        }
-        return false;
+    @Override
+    protected Log getLogger() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

@@ -1,9 +1,8 @@
 package com.tunaweza.monitoring.controllers;
 
 
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tunaweza.monitoring.contract.CompanyServiceInterface;
+import com.tunaweza.monitoring.mapper.CompanyMapper;
 import com.tunaweza.monitoring.model.Company;
 import com.tunaweza.monitoring.model.User;
 import com.tunaweza.monitoring.repository.UserRepository;
@@ -31,12 +31,16 @@ public class CompanyController {
     public ResponseEntity<?> createCompany(
         @RequestBody Company company
     ){
-        JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        try {
+            JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
             Jwt jwt = jwtAuthenticationToken.getToken();
-        User user= userRepository.findByUsername(jwt.getSubject());
-        company.setOwner(user);
-        System.out.println(" company:"+company.getOwner().getId());
-        return ResponseEntity.ok(companyService.save(company));
+            User user= userRepository.findByUsername(jwt.getSubject());
+            company.setOwner(user);
+            return ResponseEntity.ok(CompanyMapper.mapToDto(companyService.save(company)));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("droit incorrecte:");
+        }
+        
     }
 
 }

@@ -1,8 +1,13 @@
 package com.tunaweza.monitoring.services;
 
 import com.tunaweza.monitoring.contract.AroundServiceInterface;
+import com.tunaweza.monitoring.dto.AroundInputDTO;
+import com.tunaweza.monitoring.dto.AroundOutputDTO;
+import com.tunaweza.monitoring.exception.ResourceNotFoundException;
+import com.tunaweza.monitoring.mapperDTO.AroundMapper;
 import com.tunaweza.monitoring.model.*;
 import com.tunaweza.monitoring.repository.AroundRepository;
+import com.tunaweza.monitoring.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,44 +21,62 @@ import java.util.UUID;
 public class AroundService implements AroundServiceInterface {
 
     private final AroundRepository aroundRepository;
+    private final CustomerRepository customerRepository;
+    private final AroundMapper aroundMapper;
+
+
     @Override
-    public Around save(Around around) {return aroundRepository.save(around);}
+    public AroundOutputDTO save(AroundInputDTO aroundDTO) {
+        Customer customer = customerRepository.findById(aroundDTO.getCustomerId())
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+
+        Around around = aroundMapper.toEntity(aroundDTO);
+        around.setCustomer(customer);
+
+        Around savedAround = aroundRepository.save(around);
+
+        return aroundMapper.toDTO(savedAround);
+
+    }
 
     @Override
     public void delete(UUID id) {
-        Around around = aroundRepository.findById(id).orElse(null);
-        if(around!=null) aroundRepository.delete(around);
-        else
-            throw new UnsupportedOperationException("Id:"+id+" was not found!");
-    }
-
-    @Override
-    public Around update(Around around, UUID id) {
-        Around previousAround = aroundRepository.findById(id).orElse(null);
-        if(previousAround!=null){
-            previousAround.setAddress(around.getAddress());
-            previousAround.setControlPoints(around.getControlPoints());
-            previousAround.setLabel(around.getLabel());
-            previousAround.setCustomer(around.getCustomer());
-
-            return aroundRepository.save(previousAround);
+        if (!aroundRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Around not found");
         }
-        else
-            throw new UnsupportedOperationException("The around with the id:"+id+" does not exist");
+        aroundRepository.deleteById(id);
     }
 
     @Override
-    public Around findAroundById(UUID id) {
-        Around around = aroundRepository.findById(id).orElse(null);
-        if(around!=null) return around;
-        else
-            throw new UnsupportedOperationException("Id:"+id+" was not found!");
+    public AroundOutputDTO update(UUID id, AroundInputDTO aroundDTO) throws ResourceNotFoundException {
+        Around existingAround = aroundRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Around not found"));
+
+        Customer customer = customerRepository.findById(aroundDTO.getCustomerId())
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+
+        // Mettre à jour les valeurs
+        existingAround.setLabel(aroundDTO.getLabel());
+        existingAround.setAddress(aroundDTO.getAddress());
+        existingAround.setControlPointNumber(aroundDTO.getControlPointNumber());
+        existingAround.setCustomer(customer);
+
+        // Sauvegarder
+        Around updatedAround = aroundRepository.save(existingAround);
+        return aroundMapper.toDTO(updatedAround);
+    }
+
+    @Override
+    public AroundOutputDTO findAroundById(UUID id) {
+        Around around = aroundRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Around not found"));
+        return aroundMapper.toDTO(around);
 
     }
 
     @Override
-    public List<Around> findAll() {
-        return aroundRepository.findAll();
+    public List<AroundOutputDTO> findAll() {
+        return aroundMapper.toDTOList(aroundRepository.findAll());
     }
 
    /* @Override
@@ -64,12 +87,18 @@ public class AroundService implements AroundServiceInterface {
     */
 
     @Override
-    public List<Around> findAroundByCustomer(Customer customer) {
-        return aroundRepository.findAroundByCustomer(customer);
+    public List<AroundOutputDTO> findAroundByCustomer(UUID customerId) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+
+        List<Around> arounds = aroundRepository.findAroundByCustomer(customer);
+
+        return aroundMapper.toDTOList(arounds);
     }
 
-    public List<Around>getAroundsByCompany(UUID companyId) {
-        return aroundRepository.findByCustomer_Company_Id(companyId);
+    public List<AroundOutputDTO> getAroundsByCompany(UUID companyId) {
+        List<Around> arounds = aroundRepository.findByCustomer_Company_Id(companyId);
+        return aroundMapper.toDTOList(arounds);
     }
 
 }

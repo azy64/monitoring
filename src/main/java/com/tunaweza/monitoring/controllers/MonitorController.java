@@ -6,11 +6,9 @@
 package com.tunaweza.monitoring.controllers;
 
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
+//import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,17 +39,18 @@ public class MonitorController {
     private ServletContext server;
     
     @GetMapping("/homepage")
-    public String index(HttpServletRequest request){
+    public String index(HttpServletRequest request) throws MalformedURLException{
        
-            //new URL(request.getRequestURL().toString());
-            //String filename="qr-code"+System.currentTimeMillis()+".png";
-            ///String pathFileName="./src/main/resources/static/qr-code/"+filename;
-            //qrCodeService.initializeValue("Dieu est bon", 400);
-            //qrCodeService.writeImage(pathFileName, "png");
+            //@SuppressWarnings("deprecation")
+            //URL url = new URL(request.getRequestURL().toString());
+            String filename="qr-code"+System.currentTimeMillis()+".png";
+            String pathFileName="./src/main/resources/static/qr-code/"+filename;
+            qrCodeService.initializeValue("Dieu est bon", 400);
+            qrCodeService.writeImage(pathFileName, "png");
             //String urlPathFile=url.getProtocol()+"://"+url.getHost()+":"+url.getPort();
-            //String img="<img src='"+getServerHost(request)+"/qr-code/"+filename+"' title='qrcode' alt='qrcode-image'/>";
-            //return img;
-        return "";
+            String img="<img src='"+getServerHost(request)+"/qr-code/"+filename+"' title='qrcode' alt='qrcode-image'/>";
+            return img;
+        //return "";
         
     }
     public String getServerHost(HttpServletRequest request){

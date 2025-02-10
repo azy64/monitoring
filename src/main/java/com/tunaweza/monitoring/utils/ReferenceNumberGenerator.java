@@ -7,7 +7,7 @@ import java.util.Random;
 @Service
 public  class ReferenceNumberGenerator implements ReferenceNumberGeneratorInterface {
 
-    private static Random RANDOM = new Random();
+    private static final Random RANDOM = new Random();
 
 
     /**
@@ -17,6 +17,7 @@ public  class ReferenceNumberGenerator implements ReferenceNumberGeneratorInterf
      * @return Le numéro de référence généré.
      */
 
+    @Override
     public  String generateReferenceNumber(String baseName) {
         int randomNumber = 10000 + RANDOM.nextInt(90000);
         return baseName.replaceAll("\\s+", "").toUpperCase() + randomNumber;

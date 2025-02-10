@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.google.zxing.BarcodeFormat;

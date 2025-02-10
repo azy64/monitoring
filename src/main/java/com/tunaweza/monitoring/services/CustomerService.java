@@ -95,6 +95,7 @@ public class CustomerService implements CustomerServiceInterface {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<CustomerOutputDTO> getCustomersByCompany(UUID companyId) {
         List<Customer> customers = customerRepository.findByCompanyId(companyId);
         return Collections.singletonList(customerMapper.toDTO((Customer) customers));

@@ -29,7 +29,7 @@ public class ConnectionController {
     private final AuthenticationManager authenticationManager;
     private final JWTService jwtService;
 
-    @PostMapping("/register")
+    @PostMapping("/auth")
     public ResponseEntity<?> register(@RequestBody User user){
         if(userRepository.findByUsername(user.getUsername())!=null)
             return ResponseEntity.badRequest().body("user name already exist");

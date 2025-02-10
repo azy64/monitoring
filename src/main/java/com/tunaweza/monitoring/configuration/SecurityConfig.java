@@ -2,8 +2,6 @@ package com.tunaweza.monitoring.configuration;
 
 import javax.crypto.spec.SecretKeySpec;
 
-//import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,7 +32,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final CustomUserDetails userDetails;
-    //private final String jwtKey ="FxgP5G12tlyUwcZW/Xafb1BX9isM8Lw1eKxeSv3vtngnxqsOWl6saGW+1aO40Fpq";
     private final JwtServiceDecoder jwtServiceDecoder;
 
     @Bean
@@ -45,12 +42,10 @@ public class SecurityConfig {
         .csrf(csrf-> csrf.disable())
         .authorizeHttpRequests(auth->{
             auth.requestMatchers("/admins/**").authenticated()
-            .requestMatchers("/users/**")//.authenticated()
-            .hasAnyAuthority("SCOPE_USER","ADMIN")
-            //.hasRole("ADMIN")
-            //.hasAnyRole("USER")
+            .requestMatchers("/users/**")
+            .hasAnyAuthority("SCOPE_USER","SCOPE_ADMIN")
+            
             .requestMatchers("/agents/**").authenticated()
-            //.hasRole("AGENT")
             .anyRequest().permitAll();
         })
         

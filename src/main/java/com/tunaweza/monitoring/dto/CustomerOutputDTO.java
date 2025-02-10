@@ -2,16 +2,16 @@ package com.tunaweza.monitoring.dto;
 
 import lombok.Data;
 
+import java.util.UUID;
 @Data
-public class CustomerDTO {
+public class CustomerOutputDTO {
 
-    private String id;
+    private UUID id;
     private String name;
     private String email;
     private String phone;
     private String address;
-    private String siret;
     private String referenceNumber;
-    private String companyId;
-
+    private String siret;
+    private UUID companyId;
 }

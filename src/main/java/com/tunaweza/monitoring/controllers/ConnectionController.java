@@ -20,7 +20,7 @@ import com.tunaweza.monitoring.services.JWTService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/connection")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class ConnectionController {
 
@@ -29,7 +29,7 @@ public class ConnectionController {
     private final AuthenticationManager authenticationManager;
     private final JWTService jwtService;
 
-    @PostMapping("/auth")
+    @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user){
         if(userRepository.findByUsername(user.getUsername())!=null)
             return ResponseEntity.badRequest().body("user name already exist");

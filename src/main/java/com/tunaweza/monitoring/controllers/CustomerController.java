@@ -6,12 +6,9 @@ import com.tunaweza.monitoring.dto.CustomerInputDTO;
 import com.tunaweza.monitoring.dto.CustomerOutputDTO;
 import com.tunaweza.monitoring.exception.ResourceAlreadyExistException;
 import com.tunaweza.monitoring.exception.ResourceNotFoundException;
-import com.tunaweza.monitoring.model.Customer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.tunaweza.monitoring.contract.CompanyServiceInterface;
-import com.tunaweza.monitoring.model.Company;
 
 import lombok.RequiredArgsConstructor;
 

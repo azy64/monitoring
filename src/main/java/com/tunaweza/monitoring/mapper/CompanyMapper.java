@@ -36,10 +36,10 @@ public class CompanyMapper {
         .createAt(companyDto.getCreateAt())
         .email(companyDto.getEmail())
         .id(companyDto.getId())
-        .agents(
-            companyDto.getAgents()!=null ?
-            companyDto.getAgents().stream().map(agentDto->AgentMapper.mapToEntity(agentDto)).collect(Collectors.toList())
-            :null)
+        //.agents(
+        //    companyDto.getAgents()!=null ?
+        //    companyDto.getAgents().stream().map(agentDto->AgentMapper.mapToEntity(agentDto)).collect(Collectors.toList())
+        //    :null)
 
         .customers(companyDto.getCustomers()!=null?
         companyDto.getCustomers().stream().map(customerDto->CustomerMapper.mapToEntity(customerDto)).collect(Collectors.toList())

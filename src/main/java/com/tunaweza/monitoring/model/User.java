@@ -4,12 +4,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.hibernate.annotations.ManyToAny;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.OneToMany;
@@ -43,14 +41,12 @@ public class User {
      * my employer----
      */
     @ManyToOne
-    @Column(nullable = true)
+    @JoinColumn(nullable = true)
     private Company employer;
     //------------------------------------------------
     @OneToMany(mappedBy="agent", orphanRemoval = true)
-    @Column(nullable = true)
     private List<Shift>shifts;
     @OneToMany(mappedBy="agent", orphanRemoval = true)
-    @Column(nullable = true)
     private List<CheckPoint>checkPoints;
     private String referenceNumber;
 

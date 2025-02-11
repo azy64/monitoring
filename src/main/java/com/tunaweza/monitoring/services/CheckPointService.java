@@ -6,9 +6,9 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.tunaweza.monitoring.contract.CheckPointServiceInterface;
-import com.tunaweza.monitoring.model.Agent;
 import com.tunaweza.monitoring.model.CheckPoint;
 import com.tunaweza.monitoring.model.ControlPoint;
+import com.tunaweza.monitoring.model.User;
 import com.tunaweza.monitoring.repository.CheckPointRepository;
 
 import jakarta.transaction.Transactional;
@@ -59,13 +59,15 @@ public class CheckPointService implements  CheckPointServiceInterface{
     }
 
     @Override
-    public List<CheckPoint> findCheckPointByAgentAndControlPoint(Agent agent, ControlPoint controlPoint){
-        return checkPointRepository.findCheckPointByAgentAndControlPoint(agent, controlPoint);
+    public List<CheckPoint> findCheckPointByAgentAndControlPoint(User agent, ControlPoint controlPoint){
+        //return checkPointRepository.findCheckPointByAgentAndControlPoint(agent, controlPoint);
+        throw new UnsupportedOperationException("not support");
     }
 
     @Override
-    public List<CheckPoint> findCheckPointByAgent(Agent agent){
-        return checkPointRepository.findCheckPointByAgent(agent);
+    public List<CheckPoint> findCheckPointByAgent(User agent){
+        //return checkPointRepository.findCheckPointByAgent(agent);
+        throw new UnsupportedOperationException("pas supporter");
     }
     
     @Override

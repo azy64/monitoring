@@ -1,14 +1,15 @@
 package com.tunaweza.monitoring.services;
 
+import java.nio.channels.UnsupportedAddressTypeException;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
 import com.tunaweza.monitoring.contract.ShiftServiceInterface;
-import com.tunaweza.monitoring.model.Agent;
 import com.tunaweza.monitoring.model.Around;
 import com.tunaweza.monitoring.model.Shift;
+import com.tunaweza.monitoring.model.User;
 import com.tunaweza.monitoring.repository.ShiftRepository;
 
 import jakarta.transaction.Transactional;
@@ -54,13 +55,15 @@ public class ShiftService  implements  ShiftServiceInterface{
     }
 
     @Override
-    public List<Shift> findShiftByAgentAndAround(Agent agent, Around around) {
-        return shiftRepository.findShiftByAgentAndAround(agent, around);
+    public List<Shift> findShiftByAgentAndAround(User agent, Around around) {
+        //return shiftRepository.findShiftByAgentAndAround(agent, around);
+        throw new UnsupportedOperationException("not supporter");
     }
 
     @Override
-    public List<Shift> findShiftByAgent(Agent agent) {
-        return shiftRepository.findShiftByAgent(agent);
+    public List<Shift> findShiftByAgent(User agent) {
+        //return shiftRepository.findShiftByAgent(agent);
+        throw new UnsupportedOperationException("nont");
     }
 
     @Override

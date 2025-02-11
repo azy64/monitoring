@@ -30,7 +30,7 @@ public class CompanyDTO {
 
     private List<CustomerDTO> customers;
 
-     private List<AgentDto> agents;
+     private List<AgentDTO> agents;
 
     private UUID subscription;
 

@@ -2,8 +2,6 @@ package com.tunaweza.monitoring.services;
 
 import com.tunaweza.monitoring.contract.AroundServiceInterface;
 import com.tunaweza.monitoring.dto.AroundDTO;
-import com.tunaweza.monitoring.dto.AroundInputDTO;
-import com.tunaweza.monitoring.dto.AroundOutputDTO;
 import com.tunaweza.monitoring.exception.ResourceNotFoundException;
 import com.tunaweza.monitoring.mapper.AroundMapper;
 import com.tunaweza.monitoring.model.*;
@@ -98,6 +96,7 @@ public class AroundService implements AroundServiceInterface {
         return arounds.stream().map(AroundMapper::mapToDto).toList();
     }
 
+    @Override
     public List<AroundDTO> getAroundsByCompany(UUID companyId) {
         return aroundRepository.findByCustomer_Company_Id(companyId).stream().map(AroundMapper::mapToDto).toList();
     }

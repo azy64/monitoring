@@ -19,5 +19,5 @@ public class CustomerDTO {
     private String address;
     private String referenceNumber;
     private String siret;
-    private CompanyDto company;
+    private CompanyDTO company;
 }

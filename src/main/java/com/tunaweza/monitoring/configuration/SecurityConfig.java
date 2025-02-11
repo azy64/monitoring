@@ -12,8 +12,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -48,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/users/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_USER")
                         .requestMatchers("/admins/**").hasAuthority("SCOPE_ADMIN")
+                        .requestMatchers("/agents/**").hasAnyAuthority("SCOPE_ADMIN","SCOPE_USER","SCOPE_AGENT")
                         .anyRequest().authenticated()
                 )
 
@@ -64,7 +63,7 @@ public class SecurityConfig {
                     response.getWriter().write("Authentication failed: " + authException.getMessage());
                 })
                 .accessDeniedHandler((request, response, accessDeniedException) -> {
-                    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                    //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                     response.getWriter().write("Access denied: " + accessDeniedException.getMessage());
                 })

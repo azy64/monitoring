@@ -1,13 +1,8 @@
 package com.tunaweza.monitoring.controllers;
 
 import com.tunaweza.monitoring.contract.AroundServiceInterface;
-import com.tunaweza.monitoring.contract.CustomerServiceInterface;
 import com.tunaweza.monitoring.dto.AroundDTO;
-import com.tunaweza.monitoring.dto.AroundInputDTO;
-import com.tunaweza.monitoring.dto.AroundOutputDTO;
 import com.tunaweza.monitoring.exception.ResourceNotFoundException;
-import com.tunaweza.monitoring.model.Around;
-import com.tunaweza.monitoring.model.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

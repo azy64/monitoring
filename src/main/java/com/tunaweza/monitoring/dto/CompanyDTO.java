@@ -12,7 +12,7 @@ import lombok.Data;
 @Builder
 @Data
 @AllArgsConstructor
-public class CompanyDto {
+public class CompanyDTO {
     private UUID id;
     private String name;
     private String email;
@@ -28,7 +28,7 @@ public class CompanyDto {
     private Date createAt;
 
 
-   // private List<CustomerDTO> customers;
+    private List<CustomerDTO> customers;
 
      private List<AgentDto> agents;
 

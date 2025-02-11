@@ -1,8 +1,6 @@
 package com.tunaweza.monitoring.contract;
 
 import com.tunaweza.monitoring.dto.AroundDTO;
-import com.tunaweza.monitoring.dto.AroundInputDTO;
-import com.tunaweza.monitoring.dto.AroundOutputDTO;
 
 import java.util.List;
 import java.util.UUID;

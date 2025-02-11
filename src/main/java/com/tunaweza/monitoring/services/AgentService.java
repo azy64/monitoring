@@ -28,14 +28,14 @@ public class AgentService implements  AgentServiceInterface{
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(UUID id) {
         if(agentRepository.existsById(id))
             agentRepository.deleteById(id);
         
     }
 
     @Override
-    public Agent update(Agent agent, Long id) {
+    public Agent update(Agent agent, UUID id) {
         Agent oldAgent = agentRepository.findById(id).get();
         oldAgent.setNom(agent.getNom());
         oldAgent.setPrenom(agent.getPrenom());
@@ -47,7 +47,7 @@ public class AgentService implements  AgentServiceInterface{
     }
 
     @Override
-    public Agent findAgent(Long id) {
+    public Agent findAgent(UUID id) {
         return agentRepository.findById(id).orElse(null);
     }
 
@@ -56,8 +56,14 @@ public class AgentService implements  AgentServiceInterface{
         return agentRepository.findAll();
     }
 
+    @Override
     public List<Agent> getAgentsByCompany(UUID companyId) {
         return agentRepository.findByCompanyId(companyId);
+    }
+
+    @Override
+    public Agent findAgentByUsername(String username){
+        return agentRepository.findByUsername(username);
     }
 
 }

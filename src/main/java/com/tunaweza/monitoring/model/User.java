@@ -1,11 +1,16 @@
 package com.tunaweza.monitoring.model;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.annotations.ManyToAny;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
@@ -23,8 +28,32 @@ public class User {
     private String address;
     private String pictureUser;
     private String role;
+    private Date birth;
+    private String nom;
+    private String prenom;
+    @ManyToOne
+    private TypeUser typeUser;
+    /**
+     * companies I created---------
+     */
     @OneToMany(orphanRemoval=true, mappedBy="owner")
     private List<Company> Company;
+
+    /**
+     * my employer----
+     */
+    @ManyToOne
+    @Column(nullable = true)
+    private Company employer;
+    //------------------------------------------------
+    @OneToMany(mappedBy="agent", orphanRemoval = true)
+    @Column(nullable = true)
+    private List<Shift>shifts;
+    @OneToMany(mappedBy="agent", orphanRemoval = true)
+    @Column(nullable = true)
+    private List<CheckPoint>checkPoints;
+    private String referenceNumber;
+
     private Boolean activated;
     private Boolean isUsingMfa;
 

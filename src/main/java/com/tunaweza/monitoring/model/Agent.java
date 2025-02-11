@@ -2,6 +2,7 @@ package com.tunaweza.monitoring.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,10 +16,7 @@ import lombok.Data;
 @Entity
 @Data
 @Builder
-public class Agent {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
+public class Agent{
     private String nom;
     private String prenom;
     private String email;
@@ -33,6 +31,5 @@ public class Agent {
     private String referenceNumber;
     private Boolean activated;
     private Date createAt;
-
 
 }

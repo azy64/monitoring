@@ -2,8 +2,7 @@ package com.tunaweza.monitoring.controllers;
 
 
 import com.tunaweza.monitoring.contract.CustomerServiceInterface;
-import com.tunaweza.monitoring.dto.CustomerInputDTO;
-import com.tunaweza.monitoring.dto.CustomerOutputDTO;
+import com.tunaweza.monitoring.dto.CustomerDTO;
 import com.tunaweza.monitoring.exception.ResourceAlreadyExistException;
 import com.tunaweza.monitoring.exception.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -23,22 +22,22 @@ public class CustomerController {
 
     private final CustomerServiceInterface customerService;
     @PostMapping("/customer")
-    public ResponseEntity<CustomerOutputDTO> createCustomer(@RequestBody CustomerInputDTO customerDTO) throws ResourceAlreadyExistException {
+    public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerDTO customerDTO) throws ResourceAlreadyExistException {
         return ResponseEntity.ok(customerService.save(customerDTO));
     }
 
     @GetMapping("/customer/{id}")
-    public ResponseEntity<CustomerOutputDTO> getCustomer(@PathVariable UUID id) throws ResourceNotFoundException {
+    public ResponseEntity<CustomerDTO> getCustomer(@PathVariable UUID id) throws ResourceNotFoundException {
         return ResponseEntity.ok(customerService.findCustomer(id));
     }
 
     @GetMapping("/customers")
-    public ResponseEntity<List<CustomerOutputDTO>> getAllCustomers() {
+    public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
         return ResponseEntity.ok(customerService.findAll());
     }
 
     @PutMapping("/customer/{id}")
-    public ResponseEntity<CustomerOutputDTO> updateCustomer(@PathVariable UUID id, @RequestBody CustomerInputDTO customerDTO) throws ResourceNotFoundException, ResourceAlreadyExistException {
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable UUID id, @RequestBody CustomerDTO customerDTO) throws ResourceNotFoundException, ResourceAlreadyExistException {
         return ResponseEntity.ok(customerService.update(id, customerDTO));
     }
 

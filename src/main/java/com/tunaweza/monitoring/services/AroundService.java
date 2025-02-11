@@ -1,10 +1,11 @@
 package com.tunaweza.monitoring.services;
 
 import com.tunaweza.monitoring.contract.AroundServiceInterface;
+import com.tunaweza.monitoring.dto.AroundDTO;
 import com.tunaweza.monitoring.dto.AroundInputDTO;
 import com.tunaweza.monitoring.dto.AroundOutputDTO;
 import com.tunaweza.monitoring.exception.ResourceNotFoundException;
-import com.tunaweza.monitoring.mapperDTO.AroundMapper;
+import com.tunaweza.monitoring.mapper.AroundMapper;
 import com.tunaweza.monitoring.model.*;
 import com.tunaweza.monitoring.repository.AroundRepository;
 import com.tunaweza.monitoring.repository.CustomerRepository;
@@ -15,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+import static com.tunaweza.monitoring.mapper.AroundMapper.mapToDto;
+import static com.tunaweza.monitoring.mapper.AroundMapper.mapToEntity;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -22,20 +26,19 @@ public class AroundService implements AroundServiceInterface {
 
     private final AroundRepository aroundRepository;
     private final CustomerRepository customerRepository;
-    private final AroundMapper aroundMapper;
 
 
     @Override
-    public AroundOutputDTO save(AroundInputDTO aroundDTO) {
-        Customer customer = customerRepository.findById(aroundDTO.getCustomerId())
+    public AroundDTO save(AroundDTO aroundDTO) {
+        Customer customer = customerRepository.findById(aroundDTO.getCustomer().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
 
-        Around around = aroundMapper.toEntity(aroundDTO);
+        Around around = mapToEntity(aroundDTO);
         around.setCustomer(customer);
 
         Around savedAround = aroundRepository.save(around);
 
-        return aroundMapper.toDTO(savedAround);
+        return mapToDto(savedAround);
 
     }
 
@@ -48,11 +51,11 @@ public class AroundService implements AroundServiceInterface {
     }
 
     @Override
-    public AroundOutputDTO update(UUID id, AroundInputDTO aroundDTO) throws ResourceNotFoundException {
+    public AroundDTO update(UUID id, AroundDTO aroundDTO) throws ResourceNotFoundException {
         Around existingAround = aroundRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Around not found"));
 
-        Customer customer = customerRepository.findById(aroundDTO.getCustomerId())
+        Customer customer = customerRepository.findById(aroundDTO.getCustomer().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
 
         // Mettre à jour les valeurs
@@ -63,20 +66,20 @@ public class AroundService implements AroundServiceInterface {
 
         // Sauvegarder
         Around updatedAround = aroundRepository.save(existingAround);
-        return aroundMapper.toDTO(updatedAround);
+        return mapToDto(updatedAround);
     }
 
     @Override
-    public AroundOutputDTO findAroundById(UUID id) {
+    public AroundDTO findAroundById(UUID id) {
         Around around = aroundRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Around not found"));
-        return aroundMapper.toDTO(around);
+        return mapToDto(around);
 
     }
 
     @Override
-    public List<AroundOutputDTO> findAll() {
-        return aroundMapper.toDTOList(aroundRepository.findAll());
+    public List<AroundDTO> findAll() {
+        return aroundRepository.findAll().stream().map(AroundMapper::mapToDto).toList();
     }
 
    /* @Override
@@ -87,18 +90,16 @@ public class AroundService implements AroundServiceInterface {
     */
 
     @Override
-    public List<AroundOutputDTO> findAroundByCustomer(UUID customerId) {
+    public List<AroundDTO> findAroundByCustomer(UUID customerId) {
+
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
-
         List<Around> arounds = aroundRepository.findAroundByCustomer(customer);
-
-        return aroundMapper.toDTOList(arounds);
+        return arounds.stream().map(AroundMapper::mapToDto).toList();
     }
 
-    public List<AroundOutputDTO> getAroundsByCompany(UUID companyId) {
-        List<Around> arounds = aroundRepository.findByCustomer_Company_Id(companyId);
-        return aroundMapper.toDTOList(arounds);
+    public List<AroundDTO> getAroundsByCompany(UUID companyId) {
+        return aroundRepository.findByCustomer_Company_Id(companyId).stream().map(AroundMapper::mapToDto).toList();
     }
 
 }

@@ -2,13 +2,17 @@ package com.tunaweza.monitoring.configuration;
 
 import javax.crypto.spec.SecretKeySpec;
 
+
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -37,24 +41,35 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
-        .httpBasic(Customizer.withDefaults())
         .addFilterBefore(new CustomJwtFilter(userDetails,jwtServiceDecoder), UsernamePasswordAuthenticationFilter.class)
         .csrf(csrf-> csrf.disable())
-        .authorizeHttpRequests(auth->{
-            auth.requestMatchers("/admins/**").authenticated()
-            .requestMatchers("/users/**")
-            .hasAnyAuthority("SCOPE_USER","SCOPE_ADMIN")
-            
-            .requestMatchers("/agents/**").authenticated()
-            .anyRequest().permitAll();
-        })
-        
-        .oauth2ResourceServer(oauth2 -> oauth2
-        .jwt(Customizer.withDefaults())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/users/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        .requestMatchers("/admins/**").hasAuthority("ROLE_ADMIN")
+                        .anyRequest().authenticated()
+                )
+
+        .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        )
+
+        .exceptionHandling(ex -> ex
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("Authentication failed: " + authException.getMessage());
+                })
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    response.getWriter().write("Access denied: " + accessDeniedException.getMessage());
+                })
         )
 
         .build();
     }
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder(){

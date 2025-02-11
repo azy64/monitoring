@@ -2,8 +2,11 @@ package com.tunaweza.monitoring.services;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
@@ -20,18 +23,20 @@ public class JWTService {
 
     private final JwtEncoder jwtEncoder;
 
-    public String generateToken(Authentication authentication) {
+    public Map<String, String> generateToken(Authentication authentication) {
                 Instant now = Instant.now();
+                String role =  authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
             JwtClaimsSet claims = JwtClaimsSet.builder()
                       .issuer("self")
                      .issuedAt(now)
                      .claim("username", ((UserDetails)authentication.getPrincipal()).getUsername())
-                     .claim("roles",authentication.getAuthorities())
+                     .claim("roles",role)
                       .expiresAt(now.plus(1, ChronoUnit.DAYS))
                       .subject(authentication.getName())
-                      
+
                       .build();
         JwtEncoderParameters jwtEncoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS256).build(), claims);
-        return this.jwtEncoder.encode(jwtEncoderParameters).getTokenValue();
+        String token = this.jwtEncoder.encode(jwtEncoderParameters).getTokenValue();
+        return Map.of("Access-token", token);
     }
 }

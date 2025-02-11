@@ -45,6 +45,7 @@ public class CustomJwtFilter extends RequestFilter {
             if(jwtserviceDecoder.isTokenNotExpired(expiredDate)){
                 UsernamePasswordAuthenticationToken authenticationToken= new UsernamePasswordAuthenticationToken(userDetails, null,userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                System.out.println("auth:===="+authenticationToken);
             }
         }
         chain.doFilter(request, response);

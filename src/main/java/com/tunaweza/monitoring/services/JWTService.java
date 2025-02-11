@@ -2,6 +2,8 @@ package com.tunaweza.monitoring.services;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,12 +28,19 @@ public class JWTService {
                       .issuer("self")
                      .issuedAt(now)
                      .claim("username", ((UserDetails)authentication.getPrincipal()).getUsername())
-                     .claim("roles",authentication.getAuthorities())
+                     .claim("roles",
+                     authentication.getAuthorities().stream().map(k->k.getAuthority()).collect(Collectors.toList()))
+                     .claim("scope",converToString(" ",
+                     authentication.getAuthorities().stream().map(k->k.getAuthority()).collect(Collectors.toList())))
                       .expiresAt(now.plus(1, ChronoUnit.DAYS))
                       .subject(authentication.getName())
                       
                       .build();
         JwtEncoderParameters jwtEncoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS256).build(), claims);
         return this.jwtEncoder.encode(jwtEncoderParameters).getTokenValue();
+    }
+
+    public String converToString(String delimiter, List<String> object){
+        return object.stream().reduce((x,y)->x+delimiter+y).get();
     }
 }

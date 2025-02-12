@@ -75,6 +75,10 @@ public class JWTService {
     public String refreshAccessToken(String refreshToken) {
         Claims claims = jwtServiceDecoder.extractAllClaims(refreshToken, JwtConstant.SECRET_JWT_KEY);
 
+        if (!jwtServiceDecoder.isTokenNotExpired(claims.getExpiration())) {
+            throw new IllegalArgumentException("Refresh token expiré");
+        }
+
         if (!"refresh".equals(claims.get("token_type"))) {
             throw new IllegalArgumentException("Token invalide");
         }

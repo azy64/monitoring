@@ -60,14 +60,12 @@ public class CheckPointService implements  CheckPointServiceInterface{
 
     @Override
     public List<CheckPoint> findCheckPointByAgentAndControlPoint(User agent, ControlPoint controlPoint){
-        //return checkPointRepository.findCheckPointByAgentAndControlPoint(agent, controlPoint);
-        throw new UnsupportedOperationException("not support");
+        return checkPointRepository.findCheckPointByAgentAndControlPoint(agent, controlPoint);
     }
 
     @Override
     public List<CheckPoint> findCheckPointByAgent(User agent){
-        //return checkPointRepository.findCheckPointByAgent(agent);
-        throw new UnsupportedOperationException("pas supporter");
+        return checkPointRepository.findCheckPointByAgent(agent);
     }
     
     @Override

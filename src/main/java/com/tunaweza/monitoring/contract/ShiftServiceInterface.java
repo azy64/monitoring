@@ -11,7 +11,7 @@ public interface ShiftServiceInterface {
      public Shift save(Shift shift);
     public void delete(UUID id);
     public Shift update(Shift shift, UUID id);
-    public Shift findAgent(UUID id);
+    public Shift findById(UUID id);
     public List<Shift> findShiftByAgentAndAround(User agent, Around around);
     public List<Shift> findShiftByAgent(User agent);
     public List<Shift> findShiftByAround(Around around);

@@ -49,20 +49,18 @@ public class ShiftService  implements  ShiftServiceInterface{
     }
 
     @Override
-    public Shift findAgent(UUID id) {
+    public Shift findById(UUID id) {
         return shiftRepository.findById(id).orElse(null);
     }
 
     @Override
     public List<Shift> findShiftByAgentAndAround(User agent, Around around) {
-        //return shiftRepository.findShiftByAgentAndAround(agent, around);
-        throw new UnsupportedOperationException("not supporter");
+        return shiftRepository.findShiftByAgentAndAround(agent, around);
     }
 
     @Override
     public List<Shift> findShiftByAgent(User agent) {
-        //return shiftRepository.findShiftByAgent(agent);
-        throw new UnsupportedOperationException("nont");
+        return shiftRepository.findShiftByAgent(agent);
     }
 
     @Override

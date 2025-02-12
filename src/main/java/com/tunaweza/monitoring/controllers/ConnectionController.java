@@ -1,6 +1,7 @@
 package com.tunaweza.monitoring.controllers;
 
 
+import com.tunaweza.monitoring.dto.RefreshTokenRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +19,8 @@ import com.tunaweza.monitoring.repository.UserRepository;
 import com.tunaweza.monitoring.services.JWTService;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -42,9 +45,20 @@ public class ConnectionController {
         try {
             Authentication authentication = authenticationManager
             .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-            return ResponseEntity.ok(jwtService.generateToken(authentication));
+            return ResponseEntity.ok(jwtService.generateTokens(authentication));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("invalid username and password");
+        }
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest request) {
+        try {
+            String newAccessToken = jwtService.refreshAccessToken(request.getRefreshToken());
+            return ResponseEntity.ok(Map.of("access_token", newAccessToken));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", e.getMessage()));
         }
     }
 

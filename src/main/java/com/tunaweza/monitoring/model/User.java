@@ -35,7 +35,7 @@ public class User {
      * companies I created---------
      */
     @OneToMany(orphanRemoval=true, mappedBy="owner")
-    private List<Company> Company;
+    private List<Company> Companies;
 
     /**
      * my employer----
@@ -49,7 +49,6 @@ public class User {
     @OneToMany(mappedBy="agent", orphanRemoval = true)
     private List<CheckPoint>checkPoints;
     private String referenceNumber;
-
     private Boolean activated;
     private Boolean isUsingMfa;
 

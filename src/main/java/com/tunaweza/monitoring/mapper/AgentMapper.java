@@ -1,7 +1,6 @@
 package com.tunaweza.monitoring.mapper;
 
 import com.tunaweza.monitoring.dto.AgentDTO;
-import com.tunaweza.monitoring.dto.CompanyDTO;
 import com.tunaweza.monitoring.model.User;
 
 public class AgentMapper {
@@ -17,6 +16,8 @@ public class AgentMapper {
             .phoneNumber(agent.getPhoneNumber())
             .pictureUser(agent.getPictureUser())
             .employer(CompanyMapper.mapToDto(agent.getEmployer()))
+            .activated(agent.getActivated())
+            .isUsingMfa(agent.getIsUsingMfa())
         .build();
     }
 

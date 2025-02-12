@@ -20,5 +20,4 @@ public class AgentMapper {
             .isUsingMfa(agent.getIsUsingMfa())
         .build();
     }
-
 }

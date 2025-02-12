@@ -5,7 +5,6 @@ import com.tunaweza.monitoring.dto.CustomerDTO;
 import com.tunaweza.monitoring.model.Customer;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Date;

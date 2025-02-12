@@ -60,21 +60,30 @@ public class AgentService implements AgentServiceInterface{
     public User findAgentByIdAndTypeUser(UUID id, TypeUser typeUser) {
         User agent = userRepository.findByIdAndTypeUser(id, typeUser);
         if(agent!=null)return agent;
-        throw new UnsupportedOperationException("The agent does not exist'");
+        return null;
     }
 
     @Override
     public User findAgentByUsernameAndTypeUser(String username, TypeUser typeUser) {
         User agent = userRepository.findByUsernameAndTypeUser(username, typeUser);
         if(agent!=null) return agent;
-        throw new UnsupportedOperationException("The agent does not exist");
+        return null;
     }
 
     @Override
     public List<User> findAllByTypUsers(TypeUser typeUser) {
         List<User> agents = userRepository.findAllByTypeUser(typeUser);
         if(agents!=null) return agents;
-        throw new UnsupportedOperationException("Unimplemented method 'findByTypUsers'");
+        return null;
     }
 
+    @Override
+    public User findById(UUID id){
+        return userRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<User> findAll(){
+        return userRepository.findAll();
+    }
 }

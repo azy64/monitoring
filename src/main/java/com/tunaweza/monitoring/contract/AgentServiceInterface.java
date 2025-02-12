@@ -18,5 +18,7 @@ public interface AgentServiceInterface {
 
      List<User> findAllByTypUsers(TypeUser typeUser);
     //public List<Around> findAroundByShift(Shift shift);
+    User findById(UUID id);
+    List<User> findAll();
 
 }

@@ -3,17 +3,22 @@ package com.tunaweza.monitoring.contract;
 import java.util.List;
 import java.util.UUID;
 
-import com.tunaweza.monitoring.exception.ResourceAlreadyExistException;
-import com.tunaweza.monitoring.model.Agent;
+import com.tunaweza.monitoring.model.TypeUser;
+import com.tunaweza.monitoring.model.User;
+
 
 public interface AgentServiceInterface {
 
-     Agent save(Agent agent) throws ResourceAlreadyExistException;
-     void delete(Long id);
-     Agent update(Agent agent, Long id);
-     Agent findAgent(Long id);
-     List<Agent> findAll();
+    User save(User agent);
+    void delete(UUID id);
+    User update(UUID id, User agent);
 
-     List<Agent> getAgentsByCompany(UUID companyId);
+    User findAgentByIdAndTypeUser(UUID id, TypeUser typeUser);
+    User findAgentByUsernameAndTypeUser(String username,TypeUser typeUser);
+
+     List<User> findAllByTypUsers(TypeUser typeUser);
+    //public List<Around> findAroundByShift(Shift shift);
+    User findById(UUID id);
+    List<User> findAll();
 
 }

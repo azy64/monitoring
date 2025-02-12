@@ -28,16 +28,12 @@ public class JWTService {
     private final JwtServiceDecoder jwtServiceDecoder;
     private final CustomUserDetails customUserDetails;
 
-
     public Map<String, String> generateTokens(Authentication authentication) {
         return Map.of(
                 "access_token", generateToken(authentication),
                 "refresh_token", generateRefreshToken(authentication)
         );
     }
-
-
-
 
     public String generateToken(Authentication authentication) {
                 Instant now = Instant.now();
@@ -51,7 +47,6 @@ public class JWTService {
                      authentication.getAuthorities().stream().map(k->k.getAuthority()).collect(Collectors.toList())))
                       .expiresAt(now.plus(1, ChronoUnit.DAYS))
                       .subject(authentication.getName())
-                      
                       .build();
         JwtEncoderParameters jwtEncoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS256).build(), claims);
         return this.jwtEncoder.encode(jwtEncoderParameters).getTokenValue();
@@ -67,14 +62,12 @@ public class JWTService {
                 .expiresAt(now.plus(7, ChronoUnit.DAYS))
                 .subject(authentication.getName())
                 .build();
-
         JwtEncoderParameters jwtEncoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS256).build(), claims);
         return this.jwtEncoder.encode(jwtEncoderParameters).getTokenValue();
     }
 
     public String refreshAccessToken(String refreshToken) {
         Claims claims = jwtServiceDecoder.extractAllClaims(refreshToken, JwtConstant.SECRET_JWT_KEY);
-
         if (!jwtServiceDecoder.isTokenNotExpired(claims.getExpiration())) {
             throw new IllegalArgumentException("Refresh token expiré");
         }
@@ -85,16 +78,13 @@ public class JWTService {
 
         String username = claims.get("username", String.class);
         UserDetails userDetails = customUserDetails.loadUserByUsername(username);
-
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 userDetails,
                 null,
                 userDetails.getAuthorities()
         );
-
         return generateToken(authentication);
     }
-
 
     public String converToString(String delimiter, List<String> object){
         return object.stream().reduce((x,y)->x+delimiter+y).get();

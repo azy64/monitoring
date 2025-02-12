@@ -9,17 +9,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.Builder;
 import lombok.Data;
 
 @Entity
 @Data
+@Builder
 public class Shift {
     @Id
     @GeneratedValue(strategy=GenerationType.UUID)
     private UUID id;
     @ManyToOne
-    @JoinColumn(name = "agent_id", nullable = false)
-    private Agent agent;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User agent;
     @ManyToOne
     @JoinColumn(name = "around_id", nullable = false)
     private Around around;

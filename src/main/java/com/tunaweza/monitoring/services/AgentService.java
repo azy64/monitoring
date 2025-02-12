@@ -7,57 +7,83 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tunaweza.monitoring.contract.AgentServiceInterface;
-import com.tunaweza.monitoring.exception.ResourceAlreadyExistException;
-import com.tunaweza.monitoring.model.Agent;
-import com.tunaweza.monitoring.repository.AgentRepository;
+import com.tunaweza.monitoring.model.TypeUser;
+import com.tunaweza.monitoring.model.User;
+import com.tunaweza.monitoring.repository.UserRepository;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Transactional
-public class AgentService implements  AgentServiceInterface{
+public class AgentService implements AgentServiceInterface{
 
-    private final AgentRepository agentRepository;
-
+    private final UserRepository userRepository;
     @Override
-    public Agent save(Agent agent) throws ResourceAlreadyExistException {
-        Agent agentExisted = agentRepository.findByEmail(agent.getEmail());
-        if(agentExisted!=null) throw new ResourceAlreadyExistException("Agent existe dejà");
-        return agentRepository.save(agent);
-    }
-
-    @Override
-    public void delete(Long id) {
-        if(agentRepository.existsById(id))
-            agentRepository.deleteById(id);
+    public User save(User agent) {
+        if(userRepository.findByUsername(agent.getUsername())==null)
+            return userRepository.save(agent);
+        throw new UnsupportedOperationException("This agent with this username:"+agent.getUsername()+" exist already.");
         
     }
 
     @Override
-    public Agent update(Agent agent, Long id) {
-        Agent oldAgent = agentRepository.findById(id).get();
-        oldAgent.setNom(agent.getNom());
-        oldAgent.setPrenom(agent.getPrenom());
-        oldAgent.setBirthAgent(agent.getBirthAgent());
-        oldAgent.setActivated(agent.getActivated());
-        oldAgent.setEmail(agent.getEmail());
-        oldAgent.setPasswordAgent(agent.getPasswordAgent());
-        return agentRepository.save(oldAgent);
+    public void delete(UUID id) {
+        User agent = userRepository.findById(id).orElse(null);
+        if(agent!=null) userRepository.delete(agent);
+        throw new UnsupportedOperationException("The Agent does not exist'");
     }
 
     @Override
-    public Agent findAgent(Long id) {
-        return agentRepository.findById(id).orElse(null);
+    public User update(UUID id, User agent) {
+        User previousAgent = userRepository.findById(id).orElse(null);
+        if(previousAgent!=null){
+            previousAgent.setAddress(agent.getAddress());
+            previousAgent.setNom(agent.getNom());
+            previousAgent.setPrenom(agent.getPrenom());
+            previousAgent.setBirth(agent.getBirth());
+            previousAgent.setPassword(agent.getPassword());
+            previousAgent.setUsername(agent.getUsername());
+            previousAgent.setPhoneNumber(agent.getPhoneNumber());
+            previousAgent.setIsUsingMfa(agent.getIsUsingMfa());
+            previousAgent.setReferenceNumber(agent.getReferenceNumber());
+            previousAgent.setActivated(agent.getActivated());
+            previousAgent.setPictureUser(agent.getPictureUser());
+
+            return userRepository.save(previousAgent);
+        }
+        throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
     @Override
-    public List<Agent> findAll() {
-        return agentRepository.findAll();
+    public User findAgentByIdAndTypeUser(UUID id, TypeUser typeUser) {
+        User agent = userRepository.findByIdAndTypeUser(id, typeUser);
+        if(agent!=null)return agent;
+        return null;
     }
 
-    public List<Agent> getAgentsByCompany(UUID companyId) {
-        return agentRepository.findByCompanyId(companyId);
+    @Override
+    public User findAgentByUsernameAndTypeUser(String username, TypeUser typeUser) {
+        User agent = userRepository.findByUsernameAndTypeUser(username, typeUser);
+        if(agent!=null) return agent;
+        return null;
     }
 
+    @Override
+    public List<User> findAllByTypUsers(TypeUser typeUser) {
+        List<User> agents = userRepository.findAllByTypeUser(typeUser);
+        if(agents!=null) return agents;
+        return null;
+    }
+
+    @Override
+    public User findById(UUID id){
+        return userRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<User> findAll(){
+        return userRepository.findAll();
+    }
 }

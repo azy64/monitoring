@@ -18,8 +18,8 @@ public class CheckPoint {
     @GeneratedValue(strategy=GenerationType.UUID)
     private UUID id;
     @ManyToOne
-    @JoinColumn(name="agent_id",nullable=false)
-    private Agent agent;
+    @JoinColumn(name="user_id",nullable=false)
+    private User agent;
     @ManyToOne
     @JoinColumn(name="controlPoint_id",nullable=false)
     private ControlPoint controlPoint;

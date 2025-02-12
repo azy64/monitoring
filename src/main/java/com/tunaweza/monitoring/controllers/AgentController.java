@@ -3,9 +3,11 @@ package com.tunaweza.monitoring.controllers;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,5 +42,14 @@ public class AgentController {
         );
     }
 
+    @DeleteMapping("/agent/{id}")
+    public ResponseEntity<?>deleteAgent(@PathVariable UUID id){
+        agentService.delete(id);
+        return ResponseEntity.ok("Agent has been deleted");
+    }
     
+    @PutMapping("/agent/{id}")
+    public ResponseEntity<?> updateAgent(@PathVariable UUID id, @RequestBody User agent){
+        return ResponseEntity.ok(AgentMapper.mapToDto(agentService.update(id, agent)));
+    }
 }

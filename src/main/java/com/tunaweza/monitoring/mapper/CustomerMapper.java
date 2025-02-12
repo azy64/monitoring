@@ -1,9 +1,11 @@
 package com.tunaweza.monitoring.mapper;
 
+import com.tunaweza.monitoring.dto.CompanyBasicDTO;
 import com.tunaweza.monitoring.dto.CustomerDTO;
 import com.tunaweza.monitoring.model.Customer;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Date;
@@ -13,6 +15,14 @@ import java.util.Date;
 public class CustomerMapper {
 
     public static CustomerDTO mapToDto(Customer customer) {
+        CompanyBasicDTO companyBasicDTO = CompanyBasicDTO.builder()
+                .id(customer.getCompany().getId())
+                .name(customer.getCompany().getName())
+                .email(customer.getCompany().getEmail())
+                .phone(customer.getCompany().getPhone())
+                .address(customer.getCompany().getAddress())
+                .build();
+
         return CustomerDTO.builder()
                 .id(customer.getId())
                 .name(customer.getName())
@@ -21,7 +31,7 @@ public class CustomerMapper {
                 .address(customer.getAddress())
                 .referenceNumber(customer.getReferenceNumber())
                 .siret(customer.getSiret())
-                .company(CompanyMapper.mapToDto(customer.getCompany()))
+                .company(companyBasicDTO)
                 .build();
     }
 

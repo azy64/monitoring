@@ -1,11 +1,11 @@
 package com.tunaweza.monitoring.mapper;
 
-import com.tunaweza.monitoring.dto.AgentDTO;
 import com.tunaweza.monitoring.dto.ShiftDTO;
 import com.tunaweza.monitoring.model.Shift;
 
 public class ShiftMapper {
     public static ShiftDTO mapToDto(Shift shift){
+        if(shift==null) return null;
         return ShiftDTO.builder()
         .agent(AgentMapper.mapToDto(shift.getAgent()))
         .around(AroundMapper.mapToDto(shift.getAround()))
@@ -16,6 +16,7 @@ public class ShiftMapper {
     }
 
     public static Shift mapToEntity(ShiftDTO shiftDTO){
+        if(shiftDTO==null) return null;
         return Shift.builder()
         //.agent()
         .around(AroundMapper.mapToEntity(shiftDTO.getAround()))

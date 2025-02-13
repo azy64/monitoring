@@ -12,7 +12,7 @@ public interface CheckPointServiceInterface {
     public CheckPoint save(CheckPoint checkPoint);
     public void delete(UUID id);
     public CheckPoint update(CheckPoint checkPoint, UUID id);
-    public CheckPoint findAgent(UUID id);
+    public CheckPoint findById(UUID id);
     public List<CheckPoint> findAll();
     public List<CheckPoint> findCheckPointByAgentAndControlPoint(User agent, ControlPoint controlPoint);
     public List<CheckPoint> findCheckPointByAgent(User agent);

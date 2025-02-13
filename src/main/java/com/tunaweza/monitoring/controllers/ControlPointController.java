@@ -76,10 +76,12 @@ public class ControlPointController {
         );
         return ResponseEntity.badRequest().body("Operation not supported");
     }
-    
+
     public String getServerHost(HttpServletRequest request){
         return request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort();
     }
+
+    
     public String createQrCode(String text,HttpServletRequest request){
 
         String filename=UtilConstant.STATIC_QRCODE_FILE_NAME;

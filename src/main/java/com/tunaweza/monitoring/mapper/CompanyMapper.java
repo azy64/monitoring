@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 public class CompanyMapper {
 
     public static CompanyDTO mapToDto(Company company){
+        if(company==null)return null;
         return CompanyDTO.builder()
             .id(company.getId())
             .activated(company.getActivated())
@@ -31,6 +32,7 @@ public class CompanyMapper {
     }
 
     public static Company mapToEntity(CompanyDTO companyDto){
+        if(companyDto==null)return null;
         return Company.builder()
         .activated(companyDto.getActivated())
         .createAt(companyDto.getCreateAt())

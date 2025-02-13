@@ -6,6 +6,7 @@ import com.tunaweza.monitoring.model.CheckPoint;
 public class CheckPointMapper {
 
     public static CheckPointDTO mapToDto(CheckPoint checkpoint){
+        if(checkpoint==null)return null;
         return CheckPointDTO.builder()
         .id(checkpoint.getId())
         .agent(AgentMapper.mapToDto(checkpoint.getAgent()))

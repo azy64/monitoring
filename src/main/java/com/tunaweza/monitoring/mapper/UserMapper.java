@@ -5,6 +5,7 @@ import com.tunaweza.monitoring.model.User;
 
 public class UserMapper {
     public static UserDTO mapToDto(User user){
+        if(user==null)return null;
         return UserDTO.builder()
             .birth(user.getBirth())
             .id(user.getId())

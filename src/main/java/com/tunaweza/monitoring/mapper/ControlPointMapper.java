@@ -6,6 +6,7 @@ import com.tunaweza.monitoring.model.ControlPoint;
 public class ControlPointMapper {
 
     public static ControlPointDTO mapToDto(ControlPoint controlPoint){
+        if(controlPoint==null) return null;
         return ControlPointDTO.builder()
         .around(AroundMapper.mapToDto(controlPoint.getAround()))
         .createAt(controlPoint.getCreateAt())

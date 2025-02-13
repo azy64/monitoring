@@ -6,6 +6,7 @@ import com.tunaweza.monitoring.model.User;
 public class AgentMapper {
 
     public static AgentDTO mapToDto(User agent){
+        if(agent==null)return null;
         return AgentDTO.builder()
             .birth(agent.getBirth())
             .id(agent.getId())

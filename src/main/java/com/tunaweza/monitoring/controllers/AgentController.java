@@ -98,7 +98,8 @@ public class AgentController {
         List<CheckPointDTO>checkPointDTO = checkPointService.findCheckPointByAgent(agent).stream()
         .map(checkpoint->CheckPointMapper.mapToDto(checkpoint)).toList();
         return ResponseEntity.ok(
-            checkPointDTO.stream().filter(checkPointDto->checkPointDto.getId()==CheckPointId).toList().get(0)
+            checkPointDTO.stream().filter(checkPointDto->checkPointDto.getId()==CheckPointId)
+            .toList().get(0)
         );
     }
     

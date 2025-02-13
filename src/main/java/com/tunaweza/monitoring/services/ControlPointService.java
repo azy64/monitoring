@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tunaweza.monitoring.contract.ControlPointServiceInterface;
-import com.tunaweza.monitoring.exception.ResourceAlreadyExistException;
 import com.tunaweza.monitoring.model.Around;
 import com.tunaweza.monitoring.model.ControlPoint;
 import com.tunaweza.monitoring.repository.ControlPointRepository;
@@ -21,7 +20,7 @@ public class ControlPointService implements ControlPointServiceInterface {
 
     private final ControlPointRepository controlPointRepository;
     @Override
-    public ControlPoint save(ControlPoint controlPoint) throws ResourceAlreadyExistException {
+    public ControlPoint save(ControlPoint controlPoint) {
        return  controlPointRepository.save(controlPoint);
     }
 
@@ -46,7 +45,7 @@ public class ControlPointService implements ControlPointServiceInterface {
     }
 
     @Override
-    public ControlPoint findAgent(UUID id) {
+    public ControlPoint findById(UUID id) {
         return controlPointRepository.findById(id).orElse(null);
     }
 

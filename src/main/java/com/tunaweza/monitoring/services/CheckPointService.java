@@ -49,7 +49,7 @@ public class CheckPointService implements  CheckPointServiceInterface{
     }
 
     @Override
-    public CheckPoint findAgent(UUID id) {
+    public CheckPoint findById(UUID id) {
         return checkPointRepository.findById(id).orElse(null);
     }
 

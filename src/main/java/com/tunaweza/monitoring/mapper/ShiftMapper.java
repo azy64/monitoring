@@ -1,6 +1,5 @@
 package com.tunaweza.monitoring.mapper;
 
-import com.tunaweza.monitoring.dto.AgentDTO;
 import com.tunaweza.monitoring.dto.ShiftDTO;
 import com.tunaweza.monitoring.model.Shift;
 

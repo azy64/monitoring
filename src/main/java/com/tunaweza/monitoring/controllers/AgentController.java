@@ -1,5 +1,6 @@
 package com.tunaweza.monitoring.controllers;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tunaweza.monitoring.contract.AgentServiceInterface;
+import com.tunaweza.monitoring.contract.CheckPointServiceInterface;
+import com.tunaweza.monitoring.contract.ShiftServiceInterface;
+import com.tunaweza.monitoring.dto.CheckPointDTO;
+import com.tunaweza.monitoring.dto.ShiftDTO;
 import com.tunaweza.monitoring.mapper.AgentMapper;
+import com.tunaweza.monitoring.mapper.CheckPointMapper;
+import com.tunaweza.monitoring.mapper.ShiftMapper;
 import com.tunaweza.monitoring.model.User;
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +29,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AgentController {
     private final AgentServiceInterface agentService;
+    private final ShiftServiceInterface shiftService;
+    private final CheckPointServiceInterface checkPointService;
 
     @PostMapping("/agent")
     public ResponseEntity<?> createAgent(@RequestBody User agent){
@@ -52,4 +61,45 @@ public class AgentController {
     public ResponseEntity<?> updateAgent(@PathVariable UUID id, @RequestBody User agent){
         return ResponseEntity.ok(AgentMapper.mapToDto(agentService.update(id, agent)));
     }
+
+    @GetMapping("/agent/{id}/shift")
+    public ResponseEntity<?> getMyshifts(@PathVariable UUID id){
+        User agent = agentService.findById(id);
+        return ResponseEntity.ok(
+            shiftService.findShiftByAgent(agent).stream().map(shift->ShiftMapper.mapToDto(shift)).toList()
+        );
+    }
+
+    @GetMapping("/agent/{id}/shift/{shiftId}")
+    public ResponseEntity<?> getMyshifts(@PathVariable UUID id, @PathVariable UUID shiftId){
+        User agent = agentService.findById(id);
+        List<ShiftDTO>shifts = shiftService.findShiftByAgent(agent).stream().map(shift->ShiftMapper.mapToDto(shift)).toList();
+
+        return ResponseEntity.ok(
+            shifts.stream().filter(shiftDto->shiftDto.getId()==shiftId)
+        );
+    }
+
+    /*
+     * getting the checkpoint
+     */
+    @GetMapping("/agent/{id}/check-point")
+    public ResponseEntity<?> getMyCheckPoint(@PathVariable UUID id){
+        User agent = agentService.findById(id);
+        return ResponseEntity.ok(
+            checkPointService.findCheckPointByAgent(agent).stream()
+            .map(checkpoint->CheckPointMapper.mapToDto(checkpoint)).toList()
+        );
+    }
+
+    @GetMapping("/agent/{id}/check-point/{CheckPointId}")
+    public ResponseEntity<?> getMyCheckPoint(@PathVariable UUID id, @PathVariable UUID CheckPointId){
+        User agent = agentService.findById(id);
+        List<CheckPointDTO>checkPointDTO = checkPointService.findCheckPointByAgent(agent).stream()
+        .map(checkpoint->CheckPointMapper.mapToDto(checkpoint)).toList();
+        return ResponseEntity.ok(
+            checkPointDTO.stream().filter(checkPointDto->checkPointDto.getId()==CheckPointId).toList().get(0)
+        );
+    }
+    
 }

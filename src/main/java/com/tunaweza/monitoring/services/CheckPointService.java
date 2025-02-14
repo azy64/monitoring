@@ -37,6 +37,7 @@ public class CheckPointService implements  CheckPointServiceInterface{
     public CheckPoint update(CheckPoint checkPoint, UUID id) {
         CheckPoint previousCheckPoint = checkPointRepository.findById(id).orElse(null);
         if(previousCheckPoint!=null){
+            if(previousCheckPoint.getCheckedPresence()==false)return null;
             previousCheckPoint.setAgent(checkPoint.getAgent());
             previousCheckPoint.setCheckedDate(checkPoint.getCheckedDate());
             previousCheckPoint.setCheckedPresence(checkPoint.getCheckedPresence());

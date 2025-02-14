@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class UtilConstant {
     public static String STATIC_BASE_FOLDER="qr-code";
-    public static String STATIC_APP_FOLDER ="./src/main/resources/static/"+STATIC_BASE_FOLDER;
-    public static String STATIC_QRCODE_FILE_NAME =STATIC_BASE_FOLDER+System.currentTimeMillis()+".png";
+    public static String STATIC_APP_FOLDER ="/"+STATIC_BASE_FOLDER+"/";
+    public static String STATIC_QRCODE_FILE_NAME =System.currentTimeMillis()+".png";
     public static int STATIC_QRCODE_WIDTH =400;
 
 

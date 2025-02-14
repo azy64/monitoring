@@ -1,5 +1,8 @@
 package com.tunaweza.monitoring.controllers;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -24,6 +27,7 @@ import com.tunaweza.monitoring.mapper.AroundMapper;
 import com.tunaweza.monitoring.mapper.ControlPointMapper;
 import com.tunaweza.monitoring.model.ControlPoint;
 
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
@@ -34,7 +38,8 @@ import lombok.RequiredArgsConstructor;
 public class ControlPointController {
     private final ControlPointServiceInterface controlPointService;
     private final AroundServiceInterface aroundService;
-     private QrCodeInterface qrCodeService;
+    private QrCodeInterface qrCodeService;
+    private ServletContext server;    
 
     @PostMapping("/control-point")
     public ResponseEntity<?>createControlPoint(@RequestBody ControlPoint controlPoint, HttpServletRequest request) throws ResourceAlreadyExistException{
@@ -85,10 +90,22 @@ public class ControlPointController {
     public String createQrCode(String text,HttpServletRequest request){
 
         String filename=UtilConstant.STATIC_QRCODE_FILE_NAME;
-        String pathFileName=UtilConstant.STATIC_APP_FOLDER+filename;
+        //String pathFileName=UtilConstant.STATIC_APP_FOLDER+filename;
+        String qrCodeDirectory = server.getRealPath(UtilConstant.STATIC_APP_FOLDER);
+        File directory = new File(qrCodeDirectory);
+
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        String pathFileName = qrCodeDirectory + File.separator + filename;
+
         qrCodeService.initializeValue(text, UtilConstant.STATIC_QRCODE_WIDTH);
         qrCodeService.writeImage(pathFileName, "png");
-        //String img="<img src='"+getServerHost(request)+"/qr-code/"+filename+"' title='qrcode' alt='qrcode-image'/>";
-        return getServerHost(request)+UtilConstant.STATIC_BASE_FOLDER+filename;
+
+        String imageUrl = getServerHost(request) + "/qr-code/" + filename;
+        //Map<String, String> response = new HashMap<>();
+        //response.put("qrCodeUrl", imageUrl);
+
+        return imageUrl;
     }
 }

@@ -29,7 +29,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-@RequestMapping("/monitoring")
+@RequestMapping("/auth")
 public class MonitorController {
     
     private QrCodeInterface qrCodeService;

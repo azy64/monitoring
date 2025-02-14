@@ -5,10 +5,14 @@
 
 package com.tunaweza.monitoring.controllers;
 
+import java.io.File;
 import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.Map;
 //import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,23 +41,32 @@ public class MonitorController {
     //private final String owner;
     @Autowired
     private ServletContext server;
-    
+
     @GetMapping("/homepage")
-    public String index(HttpServletRequest request) throws MalformedURLException{
-       
-            //@SuppressWarnings("deprecation")
-            //URL url = new URL(request.getRequestURL().toString());
-            String filename="qr-code"+System.currentTimeMillis()+".png";
-            String pathFileName="./src/main/resources/static/qr-code/"+filename;
-            qrCodeService.initializeValue("Dieu est bon", 400);
-            qrCodeService.writeImage(pathFileName, "png");
-            //String urlPathFile=url.getProtocol()+"://"+url.getHost()+":"+url.getPort();
-            String img="<img src='"+getServerHost(request)+"/qr-code/"+filename+"' title='qrcode' alt='qrcode-image'/>";
-            return img;
-        //return "";
-        
+    public ResponseEntity<Map<String, String>> index(HttpServletRequest request) throws MalformedURLException {
+
+        String filename = "qr-code-" + System.currentTimeMillis() + ".png";
+
+        String qrCodeDirectory = server.getRealPath("/qr-code/");
+        File directory = new File(qrCodeDirectory);
+
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        String pathFileName = qrCodeDirectory + File.separator + filename;
+
+        qrCodeService.initializeValue("Dieu est bon", 400);
+        qrCodeService.writeImage(pathFileName, "png");
+
+        String imageUrl = getServerHost(request) + "/qr-code/" + filename;
+
+        Map<String, String> response = new HashMap<>();
+        response.put("qrCodeUrl", imageUrl);
+        return ResponseEntity.ok(response);
     }
-    public String getServerHost(HttpServletRequest request){
-        return request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort();
+
+    private String getServerHost(HttpServletRequest request) {
+        return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
     }
 }

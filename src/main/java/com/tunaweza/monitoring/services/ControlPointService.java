@@ -1,5 +1,6 @@
 package com.tunaweza.monitoring.services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,6 +58,11 @@ public class ControlPointService implements ControlPointServiceInterface {
     @Override
     public List<ControlPoint> findControlPointByAround(Around around){
         return controlPointRepository.findControlPointByAround(around);
+    }
+
+    @Override
+    public ControlPoint findControlPointByCreateAt(Date createAt){
+        return controlPointRepository.findControlPointByCreateAt(createAt);
     }
 }
 

@@ -1,7 +1,6 @@
 package com.tunaweza.monitoring.controllers;
 
 import java.io.File;
-import java.sql.Timestamp;
 import java.util.*;
 
 import org.springframework.http.HttpStatus;
@@ -29,7 +28,6 @@ import com.tunaweza.monitoring.model.ControlPoint;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.servlet.function.ServerResponse;
 
 @RestController
 @RequestMapping("/users")

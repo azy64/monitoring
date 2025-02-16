@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tunaweza.monitoring.contract.CheckPointServiceInterface;
+import com.tunaweza.monitoring.contract.ControlPointServiceInterface;
 import com.tunaweza.monitoring.mapper.CheckPointMapper;
 import com.tunaweza.monitoring.model.CheckPoint;
+import com.tunaweza.monitoring.model.ControlPoint;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,10 +26,21 @@ import lombok.RequiredArgsConstructor;
 public class CheckPointController {
 
     private final CheckPointServiceInterface checkPointService;
+    private final ControlPointServiceInterface controlPointService;
     @PostMapping("/check-point")
     public ResponseEntity<?> createCheckPoint(@RequestBody CheckPoint checkPoint){
         return ResponseEntity.ok(CheckPointMapper.mapToDto(checkPointService.save(checkPoint)));
     }
+    /**
+     * a special route to save CheckPoint by Post method with missing param
+     */
+    @PostMapping("/check-point/special")
+    public ResponseEntity<?> createCheckPointWithoutSomeParams(@RequestBody CheckPoint checkPoint){
+        ControlPoint controlPoint=controlPointService.findControlPointByCreateAt(checkPoint.getControlPoint().getCreateAt());
+        checkPoint.setControlPoint(controlPoint);
+        return ResponseEntity.ok(CheckPointMapper.mapToDto(checkPointService.save(checkPoint)));
+    }
+
     
     @GetMapping("/check-point/{id}")
     public ResponseEntity<?> getCheckPoint(@PathVariable UUID id){

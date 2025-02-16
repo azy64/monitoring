@@ -1,5 +1,6 @@
 package com.tunaweza.monitoring.contract;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,5 +15,6 @@ public interface ControlPointServiceInterface {
     public ControlPoint findById(UUID id);
     public List<ControlPoint> findControlPointByAround(Around around);
     public List<ControlPoint> findAll();
+    public ControlPoint findControlPointByCreateAt(Date createAt);
 
 }

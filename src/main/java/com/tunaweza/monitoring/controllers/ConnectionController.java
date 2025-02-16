@@ -2,7 +2,7 @@ package com.tunaweza.monitoring.controllers;
 
 
 import com.tunaweza.monitoring.dto.RefreshTokenRequest;
-import com.tunaweza.monitoring.dto.UserDTO;
+//import com.tunaweza.monitoring.dto.UserDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -49,7 +49,7 @@ public class ConnectionController {
                     .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
             // Récupérer l'utilisateur authentifié
-            User authenticatedUser = userRepository.findByUsername(user.getUsername());
+            //User authenticatedUser = userRepository.findByUsername(user.getUsername());
 
             // Générer les tokens
             Map<String, String> tokens = jwtService.generateTokens(authentication);
@@ -58,8 +58,8 @@ public class ConnectionController {
             response.put("access_token", tokens.get("access_token"));
             response.put("refresh_token", tokens.get("refresh_token"));
 
-            authenticatedUser.setPassword(null);
-            response.put("user", authenticatedUser);
+           // authenticatedUser.setPassword(null);
+            //response.put("user", authenticatedUser);
 
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {

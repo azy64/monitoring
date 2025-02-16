@@ -41,7 +41,6 @@ class MonitoringApplicationTests {
 			);
 			assertNotNull(company.getId());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

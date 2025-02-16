@@ -1,9 +1,8 @@
 package com.tunaweza.monitoring.controllers;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.sql.Timestamp;
+import java.util.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +29,7 @@ import com.tunaweza.monitoring.model.ControlPoint;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.servlet.function.ServerResponse;
 
 @RestController
 @RequestMapping("/users")
@@ -39,11 +39,21 @@ public class ControlPointController {
     private final ControlPointServiceInterface controlPointService;
     private final AroundServiceInterface aroundService;
     private QrCodeInterface qrCodeService;
-    private ServletContext server;    
+    private ServletContext servletContext;
 
     @PostMapping("/control-point")
     public ResponseEntity<?>createControlPoint(@RequestBody ControlPoint controlPoint, HttpServletRequest request) throws ResourceAlreadyExistException{
-        String fileName = createQrCode(controlPoint.getLabel(), request);
+        UUID controlPointId = controlPoint.getAround().getId();
+        controlPoint.setCreateAt(new Date());
+        String timestamp = controlPoint.getCreateAt().getTime()+"";
+
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(controlPointId.toString()).append("==").append(controlPoint.getLabel()).append("==").append(timestamp);
+
+        String encodedString = Base64.getEncoder().encodeToString(sb.toString().getBytes());
+
+        String fileName = createQrCode(encodedString, request);
         controlPoint.setQrCode(fileName);
         return ResponseEntity.ok(ControlPointMapper.mapToDto(controlPointService.save(controlPoint)));
     }
@@ -91,7 +101,7 @@ public class ControlPointController {
 
         String filename=UtilConstant.STATIC_QRCODE_FILE_NAME;
         //String pathFileName=UtilConstant.STATIC_APP_FOLDER+filename;
-        String qrCodeDirectory = server.getRealPath(UtilConstant.STATIC_APP_FOLDER);
+        String qrCodeDirectory = servletContext.getRealPath(UtilConstant.STATIC_APP_FOLDER);
         File directory = new File(qrCodeDirectory);
 
         if (!directory.exists()) {

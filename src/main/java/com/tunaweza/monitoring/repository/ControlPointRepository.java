@@ -1,5 +1,6 @@
 package com.tunaweza.monitoring.repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,4 +11,5 @@ import com.tunaweza.monitoring.model.ControlPoint;
 
 public interface ControlPointRepository extends JpaRepository<ControlPoint, UUID>{
     public List<ControlPoint> findControlPointByAround(Around around);
+    public ControlPoint findControlPointByCreateAt(Date createAt);
 }

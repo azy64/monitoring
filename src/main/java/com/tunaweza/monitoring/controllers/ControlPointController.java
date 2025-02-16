@@ -38,8 +38,8 @@ import org.springframework.web.servlet.function.ServerResponse;
 public class ControlPointController {
     private final ControlPointServiceInterface controlPointService;
     private final AroundServiceInterface aroundService;
-    private QrCodeInterface qrCodeService;
-    private ServletContext servletContext;
+    private final QrCodeInterface qrCodeService;
+    private final ServletContext servletContext;
 
     @PostMapping("/control-point")
     public ResponseEntity<?>createControlPoint(@RequestBody ControlPoint controlPoint, HttpServletRequest request) throws ResourceAlreadyExistException{

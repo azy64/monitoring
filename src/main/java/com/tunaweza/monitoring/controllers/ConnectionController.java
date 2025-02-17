@@ -3,6 +3,10 @@ package com.tunaweza.monitoring.controllers;
 
 import com.tunaweza.monitoring.dto.RefreshTokenRequest;
 //import com.tunaweza.monitoring.dto.UserDTO;
+import com.tunaweza.monitoring.dto.UserDTO;
+import com.tunaweza.monitoring.mapper.UserMapper;
+import com.tunaweza.monitoring.model.TypeUser;
+import com.tunaweza.monitoring.repository.TypeUserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -32,38 +37,53 @@ public class ConnectionController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final TypeUserRepository typeUserRepository;
+
     private final JWTService jwtService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user){
-        if(userRepository.findByUsername(user.getUsername())!=null)
-            return ResponseEntity.badRequest().body("user name already exist");
+    public ResponseEntity<?> register(@RequestBody User user) {
+        if (userRepository.findByUsername(user.getUsername()) != null) {
+            return ResponseEntity.badRequest().body("Username already exists");
+        }
+
+        if (user.getTypeUser() != null && user.getTypeUser().getId() != null) {
+            Optional<TypeUser> typeUser = typeUserRepository.findById(user.getTypeUser().getId());
+            if (typeUser.isPresent()) {
+                user.setTypeUser(typeUser.get());
+            } else {
+                return ResponseEntity.badRequest().body("Invalid TypeUser ID");
+            }
+        } else {
+            return ResponseEntity.badRequest().body("TypeUser is required");
+        }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return ResponseEntity.ok(userRepository.save(user));
+
+        User savedUser = userRepository.save(user);
+        return ResponseEntity.ok(savedUser);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User user) {
         try {
-            Authentication authentication = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+            );
 
-            // Récupérer l'utilisateur authentifié
-            //User authenticatedUser = userRepository.findByUsername(user.getUsername());
-
-            // Générer les tokens
             Map<String, String> tokens = jwtService.generateTokens(authentication);
+
+            User authenticatedUser = userRepository.findByUsername(user.getUsername());
+            UserDTO userDTO = UserMapper.mapToDto(authenticatedUser);
 
             Map<String, Object> response = new HashMap<>();
             response.put("access_token", tokens.get("access_token"));
             response.put("refresh_token", tokens.get("refresh_token"));
-
-           // authenticatedUser.setPassword(null);
-            //response.put("user", authenticatedUser);
+            response.put("user", userDTO);
 
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username and password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
     }
 

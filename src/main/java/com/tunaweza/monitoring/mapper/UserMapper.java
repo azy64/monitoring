@@ -11,7 +11,7 @@ public class UserMapper {
             .id(user.getId())
             .nom(user.getNom())
             .prenom(user.getPrenom())
-            .typeUser(user.getTypeUser().getLabelling())
+            .typeUser(user.getTypeUser() != null ? user.getTypeUser().getLabelling() : null)
             .address(user.getAddress())
             .phoneNumber(user.getPhoneNumber())
             .pictureUser(user.getPictureUser())

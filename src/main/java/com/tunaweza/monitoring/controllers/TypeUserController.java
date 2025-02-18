@@ -1,7 +1,7 @@
 package com.tunaweza.monitoring.controllers;
 
 import com.tunaweza.monitoring.model.TypeUser;
-import com.tunaweza.monitoring.service.TypeUserService;
+import com.tunaweza.monitoring.services.TypeUserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

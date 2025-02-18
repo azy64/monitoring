@@ -3,8 +3,6 @@ package com.tunaweza.monitoring.model;
 import java.util.Date;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -19,7 +17,6 @@ public class CheckPoint {
     private User agent;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "controlPoint_id", nullable = false)
-    @JsonBackReference
     private ControlPoint controlPoint;
     private String commentString;
     private Date checkedDate;

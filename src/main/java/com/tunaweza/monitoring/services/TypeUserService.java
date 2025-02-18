@@ -1,4 +1,4 @@
-package com.tunaweza.monitoring.service;
+package com.tunaweza.monitoring.services;
 
 import com.tunaweza.monitoring.model.TypeUser;
 import com.tunaweza.monitoring.repository.TypeUserRepository;

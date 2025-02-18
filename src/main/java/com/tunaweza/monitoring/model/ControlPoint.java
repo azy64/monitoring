@@ -2,8 +2,6 @@ package com.tunaweza.monitoring.model;
 
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -26,6 +24,5 @@ public class ControlPoint {
     private String label;
     private Date createAt;
     @OneToMany(mappedBy = "controlPoint", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
     private List<CheckPoint>checkPoints;
 }

@@ -12,7 +12,7 @@ public class AgentMapper {
             .id(agent.getId())
             .nom(agent.getNom())
             .prenom(agent.getPrenom())
-            .typeUser(agent.getTypeUser().getLabelling())
+            .typeUser(agent.getTypeUser() != null ? agent.getTypeUser().getLabelling() : null)
             .address(agent.getAddress())
             .phoneNumber(agent.getPhoneNumber())
             .pictureUser(agent.getPictureUser())

@@ -3,12 +3,9 @@ package com.tunaweza.monitoring.model;
 import java.util.Date;
 import java.util.UUID;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -17,11 +14,12 @@ public class CheckPoint {
     @Id
     @GeneratedValue(strategy=GenerationType.UUID)
     private UUID id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id",nullable=false)
     private User agent;
-    @ManyToOne
-    @JoinColumn(name="controlPoint_id",nullable=false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "controlPoint_id", nullable = false)
+    @JsonBackReference
     private ControlPoint controlPoint;
     private String commentString;
     private Date checkedDate;

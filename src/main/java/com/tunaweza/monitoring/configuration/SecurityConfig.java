@@ -45,7 +45,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/qr-code/**").permitAll()
-                        .requestMatchers("/users/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_USER")
+                        .requestMatchers("/users/check-point/special").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_USER", "SCOPE_AGENT")
+                        .requestMatchers("/users/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_USER", "SCOPE_AGENT")
                         .requestMatchers("/admins/**").hasAuthority("SCOPE_ADMIN")
                         .requestMatchers("/agents/**").hasAnyAuthority("SCOPE_ADMIN","SCOPE_USER","SCOPE_AGENT")
                         .anyRequest().authenticated()

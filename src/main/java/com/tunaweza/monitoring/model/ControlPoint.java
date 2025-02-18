@@ -2,18 +2,13 @@ package com.tunaweza.monitoring.model;
 
 import java.util.UUID;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
-
-import jakarta.persistence.GenerationType;
 
 @Entity
 @Data
@@ -30,6 +25,7 @@ public class ControlPoint {
     private Long latitude;
     private String label;
     private Date createAt;
-    @OneToMany(mappedBy="controlPoint", orphanRemoval = true)
+    @OneToMany(mappedBy = "controlPoint", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<CheckPoint>checkPoints;
 }

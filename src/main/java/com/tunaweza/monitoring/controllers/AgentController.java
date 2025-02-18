@@ -87,7 +87,7 @@ public class AgentController {
     public ResponseEntity<?> getMyCheckPoint(@PathVariable UUID id){
         User agent = agentService.findById(id);
         return ResponseEntity.ok(
-            checkPointService.findCheckPointByAgent(agent).stream()
+            checkPointService.findByAgent_Id(agent.getId()).stream()
             .map(checkpoint->CheckPointMapper.mapToDto(checkpoint)).toList()
         );
     }
@@ -95,7 +95,7 @@ public class AgentController {
     @GetMapping("/agent/{id}/check-point/{CheckPointId}")
     public ResponseEntity<?> getMyCheckPoint(@PathVariable UUID id, @PathVariable UUID CheckPointId){
         User agent = agentService.findById(id);
-        List<CheckPointDTO>checkPointDTO = checkPointService.findCheckPointByAgent(agent).stream()
+        List<CheckPointDTO>checkPointDTO = checkPointService.findByAgent_Id(agent.getId()).stream()
         .map(checkpoint->CheckPointMapper.mapToDto(checkpoint)).toList();
         return ResponseEntity.ok(
             checkPointDTO.stream().filter(checkPointDto->checkPointDto.getId()==CheckPointId)

@@ -3,6 +3,7 @@ package com.tunaweza.monitoring.services;
 import java.util.List;
 import java.util.UUID;
 
+import com.tunaweza.monitoring.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import com.tunaweza.monitoring.contract.CheckPointServiceInterface;
@@ -20,6 +21,7 @@ import lombok.AllArgsConstructor;
 public class CheckPointService implements  CheckPointServiceInterface{
 
     private final CheckPointRepository checkPointRepository;
+    private final UserRepository userRepository;
     @Override
     public CheckPoint save(CheckPoint checkPoint) {
         return checkPointRepository.save(checkPoint);
@@ -65,8 +67,10 @@ public class CheckPointService implements  CheckPointServiceInterface{
     }
 
     @Override
-    public List<CheckPoint> findCheckPointByAgent(User agent){
-        return checkPointRepository.findCheckPointByAgent(agent);
+    public List<CheckPoint> findByAgent_Id(UUID userId){
+        User user = userRepository.findById(userId).orElse(null);
+        if(user==null) return null;
+        return checkPointRepository.findByAgent_Id(user.getId());
     }
     
     @Override

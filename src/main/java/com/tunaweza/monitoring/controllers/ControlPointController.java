@@ -40,21 +40,39 @@ public class ControlPointController {
     private final ServletContext servletContext;
 
     @PostMapping("/control-point")
-    public ResponseEntity<?>createControlPoint(@RequestBody ControlPoint controlPoint, HttpServletRequest request) throws ResourceAlreadyExistException{
-        UUID controlPointId = controlPoint.getAround().getId();
+    public ResponseEntity<?> createControlPoint(@RequestBody ControlPoint controlPoint, HttpServletRequest request) throws ResourceAlreadyExistException {
+        // Vérifier si l'entité 'Around' associée est bien définie
+        UUID aroundId = controlPoint.getAround().getId();
+        if (aroundId == null) {
+            return ResponseEntity.badRequest().body("Around ID is required");
+        }
+
+        // Définir la date de création
         controlPoint.setCreateAt(new Date());
-        String timestamp = controlPoint.getCreateAt().getTime()+"";
 
+        // ✅ Étape 1 : Sauvegarder d'abord le ControlPoint pour générer son ID
+        ControlPoint savedControlPoint = controlPointService.save(controlPoint);
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(controlPointId.toString()).append("==").append(controlPoint.getLabel()).append("==").append(timestamp);
+        // Récupérer l'ID maintenant généré
+        UUID controlPointId = savedControlPoint.getId();
 
-        String encodedString = Base64.getEncoder().encodeToString(sb.toString().getBytes());
+        // ✅ Étape 2 : Générer le QR Code avec l'ID
+        String timestamp = savedControlPoint.getCreateAt().getTime() + "";
+        String qrData = aroundId.toString() + "==" + savedControlPoint.getLabel() + "==" + timestamp + "==" + controlPointId;
 
+        // Encoder en Base64
+        String encodedString = Base64.getEncoder().encodeToString(qrData.getBytes());
+
+        // Créer le QR Code avec l'ID du ControlPoint
         String fileName = createQrCode(encodedString, request);
-        controlPoint.setQrCode(fileName);
-        return ResponseEntity.ok(ControlPointMapper.mapToDto(controlPointService.save(controlPoint)));
+
+        // ✅ Étape 3 : Mettre à jour le ControlPoint avec le fichier QR Code
+        savedControlPoint.setQrCode(fileName);
+        savedControlPoint = controlPointService.save(savedControlPoint);  // Mise à jour en base
+
+        return ResponseEntity.ok(ControlPointMapper.mapToDto(savedControlPoint));
     }
+
 
     @GetMapping("/control-point/{id}")
     public ResponseEntity<?>getControlPoint(@PathVariable UUID id){

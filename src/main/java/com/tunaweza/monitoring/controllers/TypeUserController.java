@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/auth")
 public class TypeUserController {
 
     private final TypeUserService typeUserService;

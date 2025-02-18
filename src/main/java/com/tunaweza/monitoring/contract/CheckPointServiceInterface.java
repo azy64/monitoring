@@ -15,6 +15,6 @@ public interface CheckPointServiceInterface {
     public CheckPoint findById(UUID id);
     public List<CheckPoint> findAll();
     public List<CheckPoint> findCheckPointByAgentAndControlPoint(User agent, ControlPoint controlPoint);
-    public List<CheckPoint> findCheckPointByAgent(User agent);
+    public List<CheckPoint> findByAgent_Id(UUID agentId);
     public List<CheckPoint> findCheckPointByControlPoint(ControlPoint controlPoint);
 }

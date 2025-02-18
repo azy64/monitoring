@@ -13,7 +13,8 @@ public class CheckPointDTO {
 
     private UUID id;
     private AgentDTO agent;
-    private ControlPointDTO controlPoint;
+    private UUID controlPointId;
+    private String label;
     private String commentString;
     private Date checkedDate;
     private Boolean checkedPresence;

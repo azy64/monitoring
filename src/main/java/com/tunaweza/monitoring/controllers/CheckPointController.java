@@ -1,7 +1,9 @@
 package com.tunaweza.monitoring.controllers;
 
+import java.util.List;
 import java.util.UUID;
 
+import com.tunaweza.monitoring.dto.CheckPointDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +49,15 @@ public class CheckPointController {
         return ResponseEntity.ok(
             CheckPointMapper.mapToDto(checkPointService.findById(id))
         );
+    }
+
+    @GetMapping("/check-point/user/{id}")
+    public ResponseEntity<List<CheckPointDTO>> getCheckPointByAgent(@PathVariable UUID id) {
+        List<CheckPointDTO> checkPointsDto = checkPointService.findByAgent_Id(id)
+                .stream()
+                .map(CheckPointMapper::mapToDto)
+                .toList();
+        return ResponseEntity.ok(checkPointsDto);
     }
 
     @GetMapping("/check-point")

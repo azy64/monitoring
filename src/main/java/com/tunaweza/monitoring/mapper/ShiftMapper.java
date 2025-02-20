@@ -9,6 +9,7 @@ public class ShiftMapper {
         return ShiftDTO.builder()
         .agent(AgentMapper.mapToDto(shift.getAgent()))
         .around(AroundMapper.mapToDto(shift.getAround()))
+        .id(shift.getId())
         .shifDate(shift.getShifDate())
         .shiftStarTime(shift.getShiftStarTime())
         .shiftEndTime(shift.getShiftEndTime())

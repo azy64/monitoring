@@ -16,4 +16,7 @@ public interface ShiftServiceInterface {
     public List<Shift> findShiftByAgent(User agent);
     public List<Shift> findShiftByAround(Around around);
     public List<Shift> findAll();
+
+    Shift findActiveShiftByAgentAndAround(User agent, Around around);
+
 }

@@ -1,16 +1,18 @@
 package com.tunaweza.monitoring.controllers;
 
+import java.util.Optional;
 import java.util.UUID;
 
+import com.tunaweza.monitoring.contract.AroundServiceInterface;
+import com.tunaweza.monitoring.contract.UserServiceInterface;
+import com.tunaweza.monitoring.dto.AroundDTO;
+import com.tunaweza.monitoring.mapper.AroundMapper;
+import com.tunaweza.monitoring.model.Around;
+import com.tunaweza.monitoring.model.User;
+import com.tunaweza.monitoring.repository.UserRepository;
+import com.tunaweza.monitoring.services.AroundService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.tunaweza.monitoring.contract.ShiftServiceInterface;
 import com.tunaweza.monitoring.mapper.ShiftMapper;
@@ -23,6 +25,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("users/")
 public class ShiftController {
     private final ShiftServiceInterface  shiftService;
+    private final UserRepository userRepository;
+    private final AroundServiceInterface aroundService;
 
     @PostMapping("/shift")
     public ResponseEntity<?> createShift(@RequestBody Shift shift){
@@ -57,5 +61,29 @@ public class ShiftController {
            ShiftMapper.mapToDto(shiftService.update(shift, id))
         );
     }
+
+    @GetMapping("/active-shift")
+    public ResponseEntity<?> getActiveShift(
+            @RequestParam UUID agentId,
+            @RequestParam UUID aroundId
+    ) {
+        Optional<User> agent = userRepository.findById(agentId);
+        AroundDTO aroundDTO = aroundService.findAroundById(aroundId);
+
+        if (agent.isEmpty() || aroundDTO == null) {
+            return ResponseEntity.badRequest().body("Agent or Around not found");
+        }
+
+        // Convertir AroundDTO en Around si nécessaire
+        Around around = AroundMapper.mapToEntity(aroundDTO);
+
+        Shift activeShift = shiftService.findActiveShiftByAgentAndAround(agent.get(), around);
+
+        return activeShift != null
+                ? ResponseEntity.ok(ShiftMapper.mapToDto(activeShift))
+                : ResponseEntity.ok(null);
+    }
+
+
 
 }

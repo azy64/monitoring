@@ -1,6 +1,7 @@
 package com.tunaweza.monitoring.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -35,17 +36,17 @@ public class ShiftService  implements  ShiftServiceInterface{
 
     @Override
     public Shift update(Shift shift, UUID id) {
-        Shift previousShift = shiftRepository.findById(id).orElse(null);
-        if(previousShift!=null) {
-            previousShift.setShiftEndTime(shift.getShiftEndTime());
-            previousShift.setAgent(shift.getAgent());
-            previousShift.setShifDate(shift.getShifDate());
-            previousShift.setShiftStarTime(shift.getShiftStarTime());
-            previousShift.setAround(shift.getAround());
-            return shiftRepository.save(previousShift);
-        }
-        else
-            throw new UnsupportedOperationException("The shift with that id:"+id+" does not exist.");
+        return shiftRepository.findById(id)
+                .map(existingShift -> {
+                    Optional.ofNullable(shift.getShiftEndTime()).ifPresent(existingShift::setShiftEndTime);
+                    Optional.ofNullable(shift.getAgent()).ifPresent(existingShift::setAgent);
+                    Optional.ofNullable(shift.getShifDate()).ifPresent(existingShift::setShifDate);
+                    Optional.ofNullable(shift.getShiftStarTime()).ifPresent(existingShift::setShiftStarTime);
+                    Optional.ofNullable(shift.getAround()).ifPresent(existingShift::setAround);
+
+                    return shiftRepository.save(existingShift);
+                })
+                .orElseThrow(() -> new UnsupportedOperationException("The shift with that id:" + id + " does not exist."));
     }
 
     @Override
@@ -71,6 +72,17 @@ public class ShiftService  implements  ShiftServiceInterface{
     @Override
     public List<Shift> findAll() {
         return shiftRepository.findAll();
+    }
+
+    @Override
+    public Shift findActiveShiftByAgentAndAround(User agent, Around around) {
+        List<Shift> activeShifts = shiftRepository.findActiveShiftsByAgentAndAround(agent, around);
+
+        if (activeShifts.isEmpty()) {
+            return null;
+        }
+
+        return activeShifts.get(0);
     }
 
 }

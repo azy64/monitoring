@@ -112,25 +112,24 @@ public class ControlPointController {
         return request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort();
     }
 
-    
-    public String createQrCode(String text,HttpServletRequest request){
 
-        String filename=UtilConstant.STATIC_QRCODE_FILE_NAME;
-        //String pathFileName=UtilConstant.STATIC_APP_FOLDER+filename;
+    public String createQrCode(String text, HttpServletRequest request) {
+        // Générer un nom de fichier unique basé sur le timestamp et un UUID
+        String uniqueFileName = System.currentTimeMillis() + "_" + UUID.randomUUID().toString() + ".png";
+
         String qrCodeDirectory = servletContext.getRealPath(UtilConstant.STATIC_APP_FOLDER);
         File directory = new File(qrCodeDirectory);
 
         if (!directory.exists()) {
             directory.mkdirs();
         }
-        String pathFileName = qrCodeDirectory + File.separator + filename;
+
+        String pathFileName = qrCodeDirectory + File.separator + uniqueFileName;
 
         qrCodeService.initializeValue(text, UtilConstant.STATIC_QRCODE_WIDTH);
         qrCodeService.writeImage(pathFileName, "png");
 
-        String imageUrl = getServerHost(request) + "/qr-code/" + filename;
-        //Map<String, String> response = new HashMap<>();
-        //response.put("qrCodeUrl", imageUrl);
+        String imageUrl = getServerHost(request) + "/qr-code/" + uniqueFileName;
 
         return imageUrl;
     }

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.tunaweza.monitoring.dto.ControlPointDTO;
 import com.tunaweza.monitoring.model.Around;
 import com.tunaweza.monitoring.model.ControlPoint;
 
@@ -13,7 +14,7 @@ public interface ControlPointServiceInterface {
     public void delete(UUID id);
     public ControlPoint update(ControlPoint controlPoint, UUID id);
     public ControlPoint findById(UUID id);
-    public List<ControlPoint> findControlPointByAround(Around around);
+    public List<ControlPointDTO> findControlPointByAround(Around around);
     public List<ControlPoint> findAll();
     public ControlPoint findControlPointByCreateAt(Date createAt);
 

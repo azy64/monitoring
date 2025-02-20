@@ -3,7 +3,10 @@ package com.tunaweza.monitoring.services;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import com.tunaweza.monitoring.dto.ControlPointDTO;
+import com.tunaweza.monitoring.mapper.ControlPointMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,8 +59,9 @@ public class ControlPointService implements ControlPointServiceInterface {
     }
 
     @Override
-    public List<ControlPoint> findControlPointByAround(Around around){
-        return controlPointRepository.findControlPointByAround(around);
+    public List<ControlPointDTO> findControlPointByAround(Around around) {
+        return controlPointRepository.findControlPointByAround(around).stream()
+                .map(ControlPointMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override

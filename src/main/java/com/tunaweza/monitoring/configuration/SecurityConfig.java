@@ -41,6 +41,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
         .addFilterBefore(new CustomJwtFilter(userDetails,jwtServiceDecoder), UsernamePasswordAuthenticationFilter.class)
+        .cors(Customizer.withDefaults() )
         .csrf(csrf-> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()

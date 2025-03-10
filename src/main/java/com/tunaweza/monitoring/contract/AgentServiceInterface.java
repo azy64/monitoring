@@ -15,6 +15,7 @@ public interface AgentServiceInterface {
 
     User findAgentByIdAndTypeUser(UUID id, TypeUser typeUser);
     User findAgentByUsernameAndTypeUser(String username,TypeUser typeUser);
+    User findAgentByUsername(String username);
 
      List<User> findAllByTypUsers(TypeUser typeUser);
     //public List<Around> findAroundByShift(Shift shift);

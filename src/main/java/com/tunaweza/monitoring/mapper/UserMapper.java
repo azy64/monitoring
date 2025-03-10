@@ -24,4 +24,18 @@ public class UserMapper {
         .build();
     }
 
+    public static User mapToEntity(UserDTO userDTO){
+            if(userDTO==null)return null;
+            User user = new User();
+            user.setId(userDTO.getId());
+            user.setNom(userDTO.getNom());
+            user.setBirth(userDTO.getBirth());
+            user.setActivated(userDTO.getActivated());
+            user.setAddress(userDTO.getAddress());
+            user.setPhoneNumber(userDTO.getPhoneNumber());
+            user.setPictureUser(userDTO.getPictureUser());
+            user.setIsUsingMfa(userDTO.getIsUsingMfa());
+            return user;
+    }
+
 }

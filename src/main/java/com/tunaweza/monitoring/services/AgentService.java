@@ -86,4 +86,9 @@ public class AgentService implements AgentServiceInterface{
     public List<User> findAll(){
         return userRepository.findAll();
     }
+    @Override
+    public User findAgentByUsername(String username){
+            User user = userRepository.findByUsername(username);
+            return user==null? null: user;
+    }
 }

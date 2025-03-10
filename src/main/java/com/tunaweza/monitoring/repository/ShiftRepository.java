@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.tunaweza.monitoring.model.Around;
 import com.tunaweza.monitoring.model.Shift;
 import com.tunaweza.monitoring.model.User;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 

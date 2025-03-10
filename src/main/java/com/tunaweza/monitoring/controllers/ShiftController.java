@@ -4,13 +4,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.tunaweza.monitoring.contract.AroundServiceInterface;
-import com.tunaweza.monitoring.contract.UserServiceInterface;
 import com.tunaweza.monitoring.dto.AroundDTO;
 import com.tunaweza.monitoring.mapper.AroundMapper;
 import com.tunaweza.monitoring.model.Around;
 import com.tunaweza.monitoring.model.User;
 import com.tunaweza.monitoring.repository.UserRepository;
-import com.tunaweza.monitoring.services.AroundService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

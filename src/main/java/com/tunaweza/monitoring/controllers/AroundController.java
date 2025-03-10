@@ -1,8 +1,12 @@
 package com.tunaweza.monitoring.controllers;
 
 import com.tunaweza.monitoring.contract.AroundServiceInterface;
+import com.tunaweza.monitoring.contract.CustomerServiceInterface;
 import com.tunaweza.monitoring.dto.AroundDTO;
 import com.tunaweza.monitoring.exception.ResourceNotFoundException;
+import com.tunaweza.monitoring.mapper.CustomerMapper;
+import com.tunaweza.monitoring.model.Customer;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +19,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AroundController {
     private final AroundServiceInterface aroundService;
+    private final CustomerServiceInterface customerServiceInterface;
 
 
     @PostMapping("/around")
@@ -30,6 +35,12 @@ public class AroundController {
     @GetMapping("/arounds")
     public ResponseEntity<List<AroundDTO>> getAllArounds() {
         return ResponseEntity.ok(aroundService.findAll());
+    }
+
+    @GetMapping("/customer/{customerId}/arounds")
+    public ResponseEntity<List<AroundDTO>> getAllAroundsByCustomer(@PathVariable UUID customerId) {
+        Customer customer =CustomerMapper.mapToEntity(customerServiceInterface.findCustomer(customerId));
+        return ResponseEntity.ok(aroundService.findByCustomer(customer));
     }
 
     @PutMapping("/around/{id}")

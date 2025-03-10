@@ -1,10 +1,13 @@
 package com.tunaweza.monitoring.controllers;
 
 
+import com.tunaweza.monitoring.contract.CompanyServiceInterface;
 import com.tunaweza.monitoring.contract.CustomerServiceInterface;
 import com.tunaweza.monitoring.dto.CustomerDTO;
 import com.tunaweza.monitoring.exception.ResourceAlreadyExistException;
 import com.tunaweza.monitoring.exception.ResourceNotFoundException;
+import com.tunaweza.monitoring.model.Company;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +22,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CustomerController {
 
-
     private final CustomerServiceInterface customerService;
+    private final CompanyServiceInterface companyServiceInterface;
     @PostMapping("/customer")
     public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerDTO customerDTO) throws ResourceAlreadyExistException {
         return ResponseEntity.ok(customerService.save(customerDTO));
@@ -34,6 +37,12 @@ public class CustomerController {
     @GetMapping("/customers")
     public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
         return ResponseEntity.ok(customerService.findAll());
+    }
+
+    @GetMapping("/company/{companyId}/customers")
+    public ResponseEntity<List<CustomerDTO>> getAllCustomersByCompany(@PathVariable UUID companyId) {
+        Company company= companyServiceInterface.findCompanyById(companyId);
+        return ResponseEntity.ok(customerService.findCustomerByCompany(company));
     }
 
     @PutMapping("/customer/{id}")

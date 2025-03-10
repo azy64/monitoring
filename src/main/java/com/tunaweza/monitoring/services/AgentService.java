@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tunaweza.monitoring.contract.AgentServiceInterface;
+import com.tunaweza.monitoring.model.Company;
 import com.tunaweza.monitoring.model.TypeUser;
 import com.tunaweza.monitoring.model.User;
 import com.tunaweza.monitoring.repository.UserRepository;
@@ -90,5 +91,9 @@ public class AgentService implements AgentServiceInterface{
     public User findAgentByUsername(String username){
             User user = userRepository.findByUsername(username);
             return user==null? null: user;
+    }
+    @Override
+    public List<User>findByEmployer(Company company){
+        return userRepository.findByEmployer(company);
     }
 }

@@ -15,12 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tunaweza.monitoring.contract.AgentServiceInterface;
 import com.tunaweza.monitoring.contract.CheckPointServiceInterface;
+import com.tunaweza.monitoring.contract.CompanyServiceInterface;
 import com.tunaweza.monitoring.contract.ShiftServiceInterface;
+import com.tunaweza.monitoring.dto.AgentDTO;
 import com.tunaweza.monitoring.dto.CheckPointDTO;
 import com.tunaweza.monitoring.dto.ShiftDTO;
 import com.tunaweza.monitoring.mapper.AgentMapper;
 import com.tunaweza.monitoring.mapper.CheckPointMapper;
 import com.tunaweza.monitoring.mapper.ShiftMapper;
+import com.tunaweza.monitoring.model.Company;
 import com.tunaweza.monitoring.model.User;
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +34,7 @@ public class AgentController {
     private final AgentServiceInterface agentService;
     private final ShiftServiceInterface shiftService;
     private final CheckPointServiceInterface checkPointService;
+    private final CompanyServiceInterface companyServiceInterface;
 
     @PostMapping("/agent")
     public ResponseEntity<?> createAgent(@RequestBody User agent){
@@ -103,4 +107,11 @@ public class AgentController {
         );
     }
     
+    @GetMapping("/company/{companyId}/agents")
+    public ResponseEntity<?> getCompanyAgents(@PathVariable UUID companyId){
+        Company employer = companyServiceInterface.findCompanyById(companyId);
+        List<AgentDTO>agentDTOs = agentService.findByEmployer(employer).stream()
+        .map(agent->AgentMapper.mapToDto(agent)).toList();
+        return ResponseEntity.ok(agentDTOs);
+    }
 }

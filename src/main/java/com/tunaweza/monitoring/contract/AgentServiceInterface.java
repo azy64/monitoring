@@ -3,6 +3,7 @@ package com.tunaweza.monitoring.contract;
 import java.util.List;
 import java.util.UUID;
 
+import com.tunaweza.monitoring.model.Company;
 import com.tunaweza.monitoring.model.TypeUser;
 import com.tunaweza.monitoring.model.User;
 
@@ -21,5 +22,6 @@ public interface AgentServiceInterface {
     //public List<Around> findAroundByShift(Shift shift);
     User findById(UUID id);
     List<User> findAll();
+    List<User>findByEmployer(Company company);
 
 }

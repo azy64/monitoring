@@ -73,4 +73,8 @@ public class CompanyService implements CompanyServiceInterface {
     public List<Company> findAllByUser(User user){
         return companyRepository.findAllByOwner(user);
     }
+    @Override
+    public Company findCompanyByIdAndUser(UUID id,User owner){
+        return companyRepository.findOneByIdAndOwner(id, owner);
+    }
 }

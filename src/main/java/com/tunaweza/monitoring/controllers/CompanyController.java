@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,14 +16,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tunaweza.monitoring.contract.CompanyServiceInterface;
+import com.tunaweza.monitoring.dto.UserDTO;
 import com.tunaweza.monitoring.mapper.CompanyMapper;
+import com.tunaweza.monitoring.mapper.UserMapper;
 import com.tunaweza.monitoring.model.Company;
 import com.tunaweza.monitoring.model.User;
 import com.tunaweza.monitoring.repository.UserRepository;
+import com.tunaweza.monitoring.services.CurrentUserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,6 +37,7 @@ public class CompanyController {
 
     private final CompanyServiceInterface companyService;
     private final UserRepository userRepository;
+    private final CurrentUserService currentUserService;
     @PostMapping("/company")
     public ResponseEntity<?> createCompany(
         @RequestBody Company company
@@ -54,12 +56,14 @@ public class CompanyController {
 
     @GetMapping("/company/{id}")
     public ResponseEntity<?> getOneCompany(@PathVariable UUID id){
-        return ResponseEntity.ok(companyService.findCompanyById(id));
+        UserDTO userDTO = currentUserService.getUser();
+        return ResponseEntity.ok(companyService.findCompanyByIdAndUser(id,UserMapper.mapToEntity(userDTO)));
     }
 
     @GetMapping("/company")
     public ResponseEntity<?> getAllCompanies() {
-        return ResponseEntity.ok(companyService.findAll().stream()
+        UserDTO userDTO = currentUserService.getUser();
+        return ResponseEntity.ok(companyService.findAllByUser(UserMapper.mapToEntity(userDTO)).stream()
         .map(company->CompanyMapper.mapToDto(company)).collect(Collectors.toList()));
     }
 

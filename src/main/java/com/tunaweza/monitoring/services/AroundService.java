@@ -101,4 +101,10 @@ public class AroundService implements AroundServiceInterface {
         return aroundRepository.findByCustomer_Company_Id(companyId).stream().map(AroundMapper::mapToDto).toList();
     }
 
+    @Override
+    public List<AroundDTO> findByCustomer(Customer customer){
+        List<Around> arounds = aroundRepository.findAroundByCustomer(customer);
+        return arounds.stream().map(AroundMapper::mapToDto).toList();
+    }
+
 }

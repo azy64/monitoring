@@ -101,4 +101,18 @@ public class CustomerService implements CustomerServiceInterface {
                 .map(CustomerMapper::mapToDto)
                 .collect(Collectors.toList());
     }
+    @Override
+    public List<CustomerDTO> findCustomerByIdAndCompany(UUID id, Company company){
+        List<Customer> customers = customerRepository.findByIdAndCompany(id,company);
+        return customers.stream()
+                .map(CustomerMapper::mapToDto)
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<CustomerDTO> findCustomerByCompany(Company company){
+        List<Customer> customers = customerRepository.findByCompany(company);
+        return customers.stream()
+                .map(CustomerMapper::mapToDto)
+                .collect(Collectors.toList());
+    }
 }

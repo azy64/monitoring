@@ -62,7 +62,14 @@ public class CompanyController {
 
     @GetMapping("/company")
     public ResponseEntity<?> getAllCompanies() {
-        UserDTO userDTO = currentUserService.getUser();
+        //UserDTO userDTO = currentUserService.getUser();
+        return ResponseEntity.ok(companyService.findAll().stream()
+        .map(company->CompanyMapper.mapToDto(company)).collect(Collectors.toList()));
+    }
+
+    @GetMapping("/{userId}/company")
+    public ResponseEntity<?> getAllUserCompanies(@PathVariable UUID userId) {
+        UserDTO userDTO = UserMapper.mapToDto(userRepository.findById(userId).get());
         return ResponseEntity.ok(companyService.findAllByUser(UserMapper.mapToEntity(userDTO)).stream()
         .map(company->CompanyMapper.mapToDto(company)).collect(Collectors.toList()));
     }

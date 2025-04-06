@@ -9,7 +9,7 @@ import com.tunaweza.monitoring.model.Company;
 import com.tunaweza.monitoring.model.Customer;
 import com.tunaweza.monitoring.repository.CompanyRepository;
 import com.tunaweza.monitoring.repository.CustomerRepository;
-import com.tunaweza.monitoring.utils.ReferenceNumberGeneratorInterface;
+//import com.tunaweza.monitoring.utils.ReferenceNumberGeneratorInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.tunaweza.monitoring.mapper.CustomerMapper.mapToDto;
-import static com.tunaweza.monitoring.mapper.CustomerMapper.mapToEntity;
+//import static com.tunaweza.monitoring.mapper.CustomerMapper.mapToEntity;
 
 @Service
 @RequiredArgsConstructor
@@ -28,26 +28,26 @@ public class CustomerService implements CustomerServiceInterface {
 
     private final CustomerRepository customerRepository;
     private final CompanyRepository companyRepository;
-    private final ReferenceNumberGeneratorInterface referenceNumberGenerator;
+    //private final ReferenceNumberGeneratorInterface referenceNumberGenerator;
 
 
     @Override
-    public CustomerDTO save(CustomerDTO customerDTO) throws ResourceAlreadyExistException {
+    public Customer save(Customer customer) throws ResourceAlreadyExistException {
 
-        if (customerRepository.findByEmail(customerDTO.getEmail()) != null) {
+        if (customerRepository.findByEmail(customer.getEmail()) != null) {
             throw new ResourceAlreadyExistException("Customer avec cet email existe déjà.");
         }
 
-        Company company = companyRepository.findById(customerDTO.getCompany().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+        //Company company = companyRepository.findById(customerDT.getCompany().getId())
+          //      .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
 
-        Customer customer = mapToEntity(customerDTO);
-        customer.setCompany(company);
-        customer.setReferenceNumber(referenceNumberGenerator.generateReferenceNumber(customer.getName()));
+        //Customer customer = mapToEntity(customerDTO);
+        //customer.setCompany(company);
+        //customer.setReferenceNumber(referenceNumberGenerator.generateReferenceNumber(customer.getName()));
 
         Customer savedCustomer = customerRepository.save(customer);
 
-        return mapToDto(savedCustomer);
+        return savedCustomer;
     }
 
     @Override

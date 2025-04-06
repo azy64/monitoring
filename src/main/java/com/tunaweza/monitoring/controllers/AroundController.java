@@ -37,7 +37,7 @@ public class AroundController {
         return ResponseEntity.ok(aroundService.findAll());
     }
 
-    @GetMapping("/customer/{customerId}/arounds")
+    @GetMapping("/customers/{customerId}/arounds")
     public ResponseEntity<List<AroundDTO>> getAllAroundsByCustomer(@PathVariable UUID customerId) {
         Customer customer =CustomerMapper.mapToEntity(customerServiceInterface.findCustomer(customerId));
         return ResponseEntity.ok(aroundService.findByCustomer(customer));

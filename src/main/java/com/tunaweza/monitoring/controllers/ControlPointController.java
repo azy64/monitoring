@@ -117,7 +117,8 @@ public class ControlPointController {
         // Générer un nom de fichier unique basé sur le timestamp et un UUID
         String uniqueFileName = System.currentTimeMillis() + "_" + UUID.randomUUID().toString() + ".png";
 
-        String qrCodeDirectory = servletContext.getRealPath(UtilConstant.STATIC_APP_FOLDER);
+        //String qrCodeDirectory = servletContext.getRealPath(UtilConstant.STATIC_APP_FOLDER);
+        String qrCodeDirectory = UtilConstant.STATIC_APP_FOLDER;
         File directory = new File(qrCodeDirectory);
 
         if (!directory.exists()) {
@@ -129,7 +130,7 @@ public class ControlPointController {
         qrCodeService.initializeValue(text, UtilConstant.STATIC_QRCODE_WIDTH);
         qrCodeService.writeImage(pathFileName, "png");
 
-        String imageUrl = getServerHost(request) + "/qr-code/" + uniqueFileName;
+        String imageUrl = getServerHost(request) + "/images/qr-code/" + uniqueFileName;
 
         return imageUrl;
     }

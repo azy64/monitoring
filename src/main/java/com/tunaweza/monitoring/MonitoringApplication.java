@@ -51,6 +51,11 @@ public class MonitoringApplication {
 					.allowedMethods("GET","POST","OPTIONS","PUT","DELETE","HEAD")
 					.exposedHeaders("*")
 					.allowedHeaders("*").maxAge(360L).allowedOriginPatterns("http://**");
+
+					registry.addMapping("/qr-code/**").allowCredentials(false)
+					.allowedMethods("GET","HEAD")
+					.exposedHeaders("*")
+					.allowedHeaders("*");
 				}
 			};
 		}

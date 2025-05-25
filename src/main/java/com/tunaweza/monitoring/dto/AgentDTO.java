@@ -19,6 +19,7 @@ public class AgentDTO {
     private Date birth;
     private String phoneNumber;
     private String address;
+    private String email;
     private String pictureUser;
     private String typeUser;
     private CompanyDTO employer;

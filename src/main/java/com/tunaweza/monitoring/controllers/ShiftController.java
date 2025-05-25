@@ -28,6 +28,7 @@ public class ShiftController {
 
     @PostMapping("/shift")
     public ResponseEntity<?> createShift(@RequestBody Shift shift){
+        System.out.println("shift:::"+shift.toString());
         return ResponseEntity.ok(ShiftMapper.mapToDto(shiftService.save(shift)));
     }
     

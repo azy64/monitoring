@@ -3,9 +3,6 @@ package com.tunaweza.monitoring;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-//import org.springframework.web.cors.CorsConfiguration;
-//import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-//import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -43,8 +40,9 @@ public class MonitoringApplication {
 			return new WebMvcConfigurer() {
 				@Override
 				public void addCorsMappings(@SuppressWarnings("null") CorsRegistry registry){
-					registry.addMapping("/auth/***").allowedOrigins("http://localhost:3000/").
-					allowCredentials(false).allowedHeaders("*").
+					registry.addMapping("/auth/***").
+					allowedOrigins("http://localhost:3000/","http://localhost:8081","http://10.0.2.2:8081","http://192.168.1.93:8081")
+					.allowCredentials(false).allowedHeaders("*").
 					allowPrivateNetwork(true).allowedMethods("*");
 					
 					registry.addMapping("/users/**").allowCredentials(true)

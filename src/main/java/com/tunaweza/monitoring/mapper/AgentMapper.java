@@ -12,11 +12,12 @@ public class AgentMapper {
             .id(agent.getId())
             .nom(agent.getNom())
             .prenom(agent.getPrenom())
+            .email(agent.getUsername())
             .typeUser(agent.getTypeUser() != null ? agent.getTypeUser().getLabelling() : null)
             .address(agent.getAddress())
             .phoneNumber(agent.getPhoneNumber())
             .pictureUser(agent.getPictureUser())
-            .employer(CompanyMapper.mapToDto(agent.getEmployer()))
+            //.employer(CompanyMapper.mapToDto(agent.getEmployer()!=null?agent.getEmployer():null))
             .activated(agent.getActivated())
             .isUsingMfa(agent.getIsUsingMfa())
         .build();

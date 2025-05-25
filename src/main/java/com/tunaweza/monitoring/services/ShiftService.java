@@ -40,8 +40,8 @@ public class ShiftService  implements  ShiftServiceInterface{
                 .map(existingShift -> {
                     Optional.ofNullable(shift.getShiftEndTime()).ifPresent(existingShift::setShiftEndTime);
                     Optional.ofNullable(shift.getAgent()).ifPresent(existingShift::setAgent);
-                    Optional.ofNullable(shift.getShifDate()).ifPresent(existingShift::setShifDate);
-                    Optional.ofNullable(shift.getShiftStarTime()).ifPresent(existingShift::setShiftStarTime);
+                    Optional.ofNullable(shift.getShiftDate()).ifPresent(existingShift::setShiftDate);
+                    Optional.ofNullable(shift.getShiftStartTime()).ifPresent(existingShift::setShiftStartTime);
                     Optional.ofNullable(shift.getAround()).ifPresent(existingShift::setAround);
 
                     return shiftRepository.save(existingShift);

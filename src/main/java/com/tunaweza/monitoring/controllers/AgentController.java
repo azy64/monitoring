@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +26,6 @@ import com.tunaweza.monitoring.mapper.CheckPointMapper;
 import com.tunaweza.monitoring.mapper.ShiftMapper;
 import com.tunaweza.monitoring.model.Company;
 import com.tunaweza.monitoring.model.User;
-//import com.tunaweza.monitoring.repository.CompanyRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,10 +37,13 @@ public class AgentController {
     private final ShiftServiceInterface shiftService;
     private final CheckPointServiceInterface checkPointService;
     private final CompanyServiceInterface companyServiceInterface;
+    private final PasswordEncoder passwordEncoder;
     //private final CompanyRepository companyRepository;
 
     @PostMapping("/agent")
     public ResponseEntity<?> createAgent(@RequestBody User agent){
+        agent.setPassword(passwordEncoder.encode(agent.getPassword()));
+        agent.setRole("AGENT");
         User agentChecked = agentService.findAgentByUsernameAndTypeUser(agent.getUsername(), agent.getTypeUser());
         if(agentChecked==null){
            //Company employer = companyRepository.findById(agent.getEmployer().getId()).get();

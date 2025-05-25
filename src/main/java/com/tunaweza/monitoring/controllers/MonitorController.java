@@ -46,9 +46,13 @@ public class MonitorController {
     public ResponseEntity<Map<String, String>> index(HttpServletRequest request) throws MalformedURLException {
 
         String filename = "qr-code-" + System.currentTimeMillis() + ".png";
+        System.out.println("filename==========================:"+filename);
 
-        String qrCodeDirectory = server.getRealPath("/qr-code/");
+        String qrCodeDirectory = "qr-code";
+        System.out.println("qrCodeDirectory***====:"+qrCodeDirectory);
+        //System.out.println("server context!!!!!=:"+server.getContextPath());
         File directory = new File(qrCodeDirectory);
+        System.out.println("rep********:"+ directory.getAbsolutePath());
 
         if (!directory.exists()) {
             directory.mkdirs();
@@ -60,6 +64,7 @@ public class MonitorController {
         qrCodeService.writeImage(pathFileName, "png");
 
         String imageUrl = getServerHost(request) + "/qr-code/" + filename;
+        System.out.println("=================================*******:"+imageUrl);
 
         Map<String, String> response = new HashMap<>();
         response.put("qrCodeUrl", imageUrl);

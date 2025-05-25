@@ -3,7 +3,6 @@ package com.tunaweza.monitoring.controllers;
 import java.util.List;
 import java.util.UUID;
 
-import com.tunaweza.monitoring.dto.CheckPointDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tunaweza.monitoring.contract.CheckPointServiceInterface;
 import com.tunaweza.monitoring.contract.ControlPointServiceInterface;
+import com.tunaweza.monitoring.dto.CheckPointDTO;
 import com.tunaweza.monitoring.mapper.CheckPointMapper;
 import com.tunaweza.monitoring.model.CheckPoint;
 import com.tunaweza.monitoring.model.ControlPoint;
@@ -31,6 +31,7 @@ public class CheckPointController {
     private final ControlPointServiceInterface controlPointService;
     @PostMapping("/check-point")
     public ResponseEntity<?> createCheckPoint(@RequestBody CheckPoint checkPoint){
+        System.out.println("checkpoint value:::"+ checkPoint.toString());
         return ResponseEntity.ok(CheckPointMapper.mapToDto(checkPointService.save(checkPoint)));
     }
     /**

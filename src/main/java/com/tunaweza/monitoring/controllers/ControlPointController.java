@@ -1,7 +1,9 @@
 package com.tunaweza.monitoring.controllers;
 
 import java.io.File;
-import java.util.*;
+import java.util.Base64;
+import java.util.Date;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +27,6 @@ import com.tunaweza.monitoring.mapper.AroundMapper;
 import com.tunaweza.monitoring.mapper.ControlPointMapper;
 import com.tunaweza.monitoring.model.ControlPoint;
 
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
@@ -34,10 +35,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Validated
 public class ControlPointController {
+
     private final ControlPointServiceInterface controlPointService;
     private final AroundServiceInterface aroundService;
     private final QrCodeInterface qrCodeService;
-    private final ServletContext servletContext;
+    //private final ServletContext servletContext;
 
     @PostMapping("/control-point")
     public ResponseEntity<?> createControlPoint(@RequestBody ControlPoint controlPoint, HttpServletRequest request) throws ResourceAlreadyExistException {
@@ -73,51 +75,51 @@ public class ControlPointController {
         return ResponseEntity.ok(ControlPointMapper.mapToDto(savedControlPoint));
     }
 
-
     @GetMapping("/control-point/{id}")
-    public ResponseEntity<?>getControlPoint(@PathVariable UUID id){
+    public ResponseEntity<?> getControlPoint(@PathVariable UUID id) {
         return ResponseEntity.ok(ControlPointMapper.mapToDto(controlPointService.findById(id)));
     }
 
     @GetMapping("/control-point")
-    public ResponseEntity<?>getControlPoint(){
+    public ResponseEntity<?> getControlPoint() {
         return ResponseEntity.ok(
-            controlPointService.findAll().stream()
-            .map(control->ControlPointMapper.mapToDto(control)).toList()
+                controlPointService.findAll().stream()
+                        .map(control -> ControlPointMapper.mapToDto(control)).toList()
         );
     }
 
     @DeleteMapping("/control-point/{id}")
-    public ResponseEntity<?> deleteCoontrolPoint(@PathVariable UUID id){
+    public ResponseEntity<?> deleteCoontrolPoint(@PathVariable UUID id) {
         controlPointService.delete(id);
         return ResponseEntity.ok(HttpStatus.GONE);
     }
 
     @PutMapping("/control-point/{id}")
-    public ResponseEntity<?> updateCoontrolPoint(@PathVariable UUID id, ControlPoint controlPoint){
+    public ResponseEntity<?> updateCoontrolPoint(@PathVariable UUID id, ControlPoint controlPoint) {
         return ResponseEntity.ok(ControlPointMapper.mapToDto(controlPointService.update(controlPoint, id)));
     }
 
     @GetMapping("/around/{id}/control-point")
-    public ResponseEntity<?>getcontrolPointByAround(@PathVariable UUID id){
+    public ResponseEntity<?> getcontrolPointByAround(@PathVariable UUID id) {
         AroundDTO around = aroundService.findAroundById(id);
-        if(around!=null)
-        return ResponseEntity.ok(
-            controlPointService.findControlPointByAround(AroundMapper.mapToEntity(around))
-        );
+        if (around != null) {
+            return ResponseEntity.ok(
+                    controlPointService.findControlPointByAround(AroundMapper.mapToEntity(around))
+            );
+        }
         return ResponseEntity.badRequest().body("Operation not supported");
     }
 
-    public String getServerHost(HttpServletRequest request){
-        return request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort();
+    public String getServerHost(HttpServletRequest request) {
+        return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
     }
-
 
     public String createQrCode(String text, HttpServletRequest request) {
         // Générer un nom de fichier unique basé sur le timestamp et un UUID
         String uniqueFileName = System.currentTimeMillis() + "_" + UUID.randomUUID().toString() + ".png";
 
-        String qrCodeDirectory = servletContext.getRealPath(UtilConstant.STATIC_APP_FOLDER);
+        //String qrCodeDirectory = servletContext.getRealPath(UtilConstant.STATIC_APP_FOLDER);
+        String qrCodeDirectory = UtilConstant.STATIC_APP_FOLDER;
         File directory = new File(qrCodeDirectory);
 
         if (!directory.exists()) {
@@ -129,7 +131,7 @@ public class ControlPointController {
         qrCodeService.initializeValue(text, UtilConstant.STATIC_QRCODE_WIDTH);
         qrCodeService.writeImage(pathFileName, "png");
 
-        String imageUrl = getServerHost(request) + "/qr-code/" + uniqueFileName;
+        String imageUrl = getServerHost(request) + "/images/qr-code/" + uniqueFileName;
 
         return imageUrl;
     }

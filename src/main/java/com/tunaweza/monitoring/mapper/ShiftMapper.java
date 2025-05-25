@@ -10,8 +10,8 @@ public class ShiftMapper {
         .agent(AgentMapper.mapToDto(shift.getAgent()))
         .around(AroundMapper.mapToDto(shift.getAround()))
         .id(shift.getId())
-        .shifDate(shift.getShifDate())
-        .shiftStarTime(shift.getShiftStarTime())
+        .shifDate(shift.getShiftDate())
+        .shiftStarTime(shift.getShiftStartTime())
         .shiftEndTime(shift.getShiftEndTime())
         .build();
     }
@@ -21,8 +21,8 @@ public class ShiftMapper {
         return Shift.builder()
         //.agent()
         .around(AroundMapper.mapToEntity(shiftDTO.getAround()))
-        .shifDate(shiftDTO.getShifDate())
-        .shiftStarTime(shiftDTO.getShiftStarTime())
+        .shiftDate(shiftDTO.getShifDate())
+        .shiftStartTime(shiftDTO.getShiftStarTime())
         .shiftEndTime(shiftDTO.getShiftEndTime())
         .build();
     }

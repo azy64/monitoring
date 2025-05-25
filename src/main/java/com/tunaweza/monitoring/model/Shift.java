@@ -27,8 +27,8 @@ public class Shift {
     @ManyToOne
     @JoinColumn(name = "around_id", nullable = false)
     private Around around;
-    private Date shifDate;
-    private Date shiftStarTime;
+    private Date shiftDate;
+    private Date shiftStartTime;
     private Date shiftEndTime;
 
 }

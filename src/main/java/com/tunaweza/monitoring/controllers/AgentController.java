@@ -25,6 +25,8 @@ import com.tunaweza.monitoring.mapper.CheckPointMapper;
 import com.tunaweza.monitoring.mapper.ShiftMapper;
 import com.tunaweza.monitoring.model.Company;
 import com.tunaweza.monitoring.model.User;
+//import com.tunaweza.monitoring.repository.CompanyRepository;
+
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -35,11 +37,19 @@ public class AgentController {
     private final ShiftServiceInterface shiftService;
     private final CheckPointServiceInterface checkPointService;
     private final CompanyServiceInterface companyServiceInterface;
+    //private final CompanyRepository companyRepository;
 
     @PostMapping("/agent")
     public ResponseEntity<?> createAgent(@RequestBody User agent){
         User agentChecked = agentService.findAgentByUsernameAndTypeUser(agent.getUsername(), agent.getTypeUser());
-        if(agentChecked==null)ResponseEntity.ok(AgentMapper.mapToDto(agentService.save(agent)));
+        if(agentChecked==null){
+           //Company employer = companyRepository.findById(agent.getEmployer().getId()).get();
+           //agent.setEmployer(employer);
+           //employer.getAgents().add(agent);
+           //System.out.println("agent before save:=======:"+agent.toString());
+            return ResponseEntity.ok(AgentMapper.mapToDto(agentService.save(agent)));
+        }
+        
         return ResponseEntity.badRequest().body("The Agent exist already");
     }
 

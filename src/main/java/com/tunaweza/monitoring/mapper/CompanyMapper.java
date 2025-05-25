@@ -17,7 +17,7 @@ public class CompanyMapper {
         return CompanyDTO.builder()
             .id(company.getId())
             .activated(company.getActivated())
-            .username(company.getOwner().getUsername())
+            .username(company.getOwner()!=null?company.getOwner().getUsername():null)
             .createAt(company.getCreateAt())
             .email(company.getEmail())
             .name(company.getName())

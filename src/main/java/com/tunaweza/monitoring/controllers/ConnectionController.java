@@ -1,12 +1,10 @@
 package com.tunaweza.monitoring.controllers;
 
 
-import com.tunaweza.monitoring.dto.RefreshTokenRequest;
-//import com.tunaweza.monitoring.dto.UserDTO;
-import com.tunaweza.monitoring.dto.UserDTO;
-import com.tunaweza.monitoring.mapper.UserMapper;
-import com.tunaweza.monitoring.model.TypeUser;
-import com.tunaweza.monitoring.repository.TypeUserRepository;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,15 +17,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tunaweza.monitoring.dto.RefreshTokenRequest;
+import com.tunaweza.monitoring.dto.UserDTO;
+import com.tunaweza.monitoring.mapper.UserMapper;
+import com.tunaweza.monitoring.model.TypeUser;
 import com.tunaweza.monitoring.model.User;
+import com.tunaweza.monitoring.repository.TypeUserRepository;
 import com.tunaweza.monitoring.repository.UserRepository;
 import com.tunaweza.monitoring.services.JWTService;
 
 import lombok.RequiredArgsConstructor;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -46,7 +45,7 @@ public class ConnectionController {
         if (userRepository.findByUsername(user.getUsername()) != null) {
             return ResponseEntity.badRequest().body("Username already exists");
         }
-
+        //user.setRole("AGENT");
         if (user.getTypeUser() != null && user.getTypeUser().getId() != null) {
             Optional<TypeUser> typeUser = typeUserRepository.findById(user.getTypeUser().getId());
             if (typeUser.isPresent()) {
